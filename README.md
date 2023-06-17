@@ -1,5 +1,7 @@
 # Raspinstall  
-Personal guide to installing and setting up my Raspberry Pi.
+Personal guide to installing and setting up my Raspberry Pi.  
+Scripts should be [idempotent](https://en.wikipedia.org/wiki/Idempotence):
+    Regardless of how many times the script is again executed with the same input, the output must always remain the same.
 # Steps to do on your local Linux-PC
 ## Clone this repository
 `git clone git@github.com:CastraRegina/Raspinstall.git`
@@ -14,7 +16,7 @@ Extract the image file at its place:
 This will create the 11GB image file `2023-05-03-raspios-bullseye-armhf-full.img`.
 
 ## Setting environment variables
-Do a `sudo` to be `root`...  
+Do a `sudo su -` to be `root`...  
 ```
 set -e
 set -u
