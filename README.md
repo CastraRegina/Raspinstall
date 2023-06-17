@@ -38,9 +38,12 @@ BOOTDIR=/media/fk/bootfs/
 ROOTFSDIR=/media/fk/rootfs/
 CMDLINE=${BOOTDIR}cmdline.txt
 CONFIGTXT=${BOOTDIR}config.txt
+USERCONFTXT=${BOOTDIR}userconf.txt
+USERNAME=fk
 RASPIIMAGE=/mnt/lanas01_test/iso_images/raspios/2023-05-03-raspios-bullseye-armhf-full.img
 SDCARDDEST=/dev/sdc    # check carefully !!!
 ```
+Umount SD-card if needed...
 ```
 # -------------------------------------------------------------------------------
 # check if dirs are mounted and umount them... 
@@ -67,7 +70,7 @@ if mount | grep ${SDCARDDEST} ; then
 fi
 ```
 
-## Copy image onto SDCARD
+## Copy image onto SD-card
 ```
 # -------------------------------------------------------------------------------
 # copy image to sdcard 
@@ -84,19 +87,18 @@ fi
 ```
 It took roughly 13mins to copy the image to the SD-card.
 
-## Modify configuration on SDCARD
+## Modify configuration on SD-card
 To support a headless Raspberry Pi, the remote computer should be accessible via `ssh` directly after installation.
 
-### Mount SDCARD
+### Mount SD-card
+Mount and check if `mount` was successful:
 ```
 # -------------------------------------------------------------------------------
 # mount .../bootfs and .../rootfs directory 
 # -------------------------------------------------------------------------------
 mount -o x-mount.mkdir ${SDCARDDEST}1 ${BOOTDIR}
 mount -o x-mount.mkdir ${SDCARDDEST}2 ${ROOTFSDIR}
-```
-Check if `mount` was successful:
-```
+
 # -------------------------------------------------------------------------------
 # check if .../bootfs and .../rootfs directory exists:
 # -------------------------------------------------------------------------------
@@ -119,7 +121,8 @@ echo "${ROOTFSDIR} is available."
 echo
 ```
 
-### Do modifications on SDCARD
+### Do modifications on SD-card
+Enable `ssh`:
 ```
 # -------------------------------------------------------------------------------
 # create file ssh in /boot:
@@ -129,6 +132,9 @@ touch "${BOOTDIR}/ssh"
 echo "touch ${BOOTDIR}ssh - done."
 echo
 ```
+Switch off WLAN and bluetooth like explained by 
+[https://raspberrytips.com/disable-wifi-raspberry-pi/](https://raspberrytips.com/disable-wifi-raspberry-pi/)
+and do some settings for my small screen:
 ```
 # -------------------------------------------------------------------------------
 # edit /boot/config.txt
@@ -138,11 +144,11 @@ if [ ! -e ${CONFIGTXT} ] ; then
   echo "${CONFIGTXT} does not exist!!!"
   exit 5
 fi
-if ! grep -q "dtoverlay=pi3-disable-wifi" ${CONFIGTXT} ; then
+if ! grep -q "dtoverlay=disable-wifi" ${CONFIGTXT} ; then
   echo ""                                             >> ${CONFIGTXT}
   echo "# switch off onboard WLAN and bluetooth"      >> ${CONFIGTXT}
-  echo "dtoverlay=pi3-disable-wifi"                   >> ${CONFIGTXT}
-  echo "dtoverlay=pi3-disable-bt"                     >> ${CONFIGTXT}
+  echo "dtoverlay=disable-wifi"                   >> ${CONFIGTXT}
+  echo "dtoverlay=disable-bt"                     >> ${CONFIGTXT}
   echo ""                                             >> ${CONFIGTXT}
   echo "# hdmi configuration for 10inch touchscreen:" >> ${CONFIGTXT}
   echo "hdmi_force_hotplug=1"                         >> ${CONFIGTXT}
@@ -150,16 +156,24 @@ if ! grep -q "dtoverlay=pi3-disable-wifi" ${CONFIGTXT} ; then
   echo "hdmi_mode=27"                                 >> ${CONFIGTXT}
   echo ""                                             >> ${CONFIGTXT}
   echo "  ${CONFIGTXT} modified." 
-  sed -i 's/^dtoverlay=vc4-fkms-v3d*$/#dtoverlay=vc4-fkms-v3d/g' ${CONFIGTXT}
-  echo "  ${CONFIGTXT} modified --> comment out (for 10inch-touchscreen): dtoverlay=vc4-fkms-v3d" 
+
+  sed -i 's/^dtoverlay=vc4-kms-v3d*$/#dtoverlay=vc4-kms-v3d/g' ${CONFIGTXT}
+  echo "  ${CONFIGTXT} modified --> comment out (for 10inch-touchscreen): dtoverlay=vc4-kms-v3d" 
 else
   echo "  ${CONFIGTXT} already configured (no changes done)."
 fi
 echo "configuring ${CONFIGTXT} done."
 echo
 ```
+Setup a new user for the headless Raspberry Pi as explained in 
+[http://rptl.io/newuser](http://rptl.io/newuser)...  
+Do not forget to set a better password later!!!
+```
+encpasswd=$(echo '12345678' | openssl passwd -6 -stdin)
+echo ${USERNAME}:${encpasswd} > ${USERCONFTXT}
+```
 
-### Umount SDCARD
+### Umount SD-card
 ```
 # -------------------------------------------------------------------------------
 # umount .../bootfs and .../rootfs directory 
@@ -170,8 +184,23 @@ while mount | grep -q ${SDCARDDEST}  ; do
   umount "${ROOTFSDIR}" || echo "error unmount ${ROOTFSDIR}"
   sleep 1s
 done
-
+rmdir  "${BOOTDIR}"   || echo "error rmdir ${BOOTDIR}"
+rmdir  "${ROOTFSDIR}" || echo "error rmdir ${ROOTFSDIR}"
 ```
 
-# Steps to do on your remote Rasperry Pi
+# Steps to do on your remote Raspberry Pi
+- Insert SD-card and boot.
+- You can access the remote Raspberry Pi using ssh:  
+  `ssh fk@<remote-PC-ip-address>`  
+  User name "fk" and password "12345678".
 
+## Update software and firmware
+```
+sudo apt update
+sudo apt upgrade
+sudo apt dist-upgrade
+sudo apt full-upgrade
+sudo rpi-eeprom-update    # checks if a firmware update is needed.
+# sudo apt install rpi-update
+# sudo rpi-update 
+```
