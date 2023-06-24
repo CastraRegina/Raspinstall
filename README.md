@@ -34,11 +34,11 @@ fi
 # Set environment variables
 # -------------------------------------------------------------------------------
 # You must be root !!!
-BOOTDIR=/media/fk/bootfs/
+BOOTFSDIR=/media/fk/bootfs/
 ROOTFSDIR=/media/fk/rootfs/
-CMDLINE=${BOOTDIR}cmdline.txt
-CONFIGTXT=${BOOTDIR}config.txt
-USERCONFTXT=${BOOTDIR}userconf.txt
+CMDLINE=${BOOTFSDIR}cmdline.txt
+CONFIGTXT=${BOOTFSDIR}config.txt
+USERCONFTXT=${BOOTFSDIR}userconf.txt
 USERNAME=fk
 RASPIIMAGE=/mnt/lanas01_test/iso_images/raspios/2023-05-03-raspios-bullseye-armhf-full.img
 SDCARDDEST=/dev/sdc    # check carefully !!!
@@ -48,9 +48,9 @@ Umount SD-card if needed...
 # -------------------------------------------------------------------------------
 # check if dirs are mounted and umount them... 
 # -------------------------------------------------------------------------------
-while [ -e ${BOOTDIR} ] ; do
-  echo "umount ${BOOTDIR}"
-  umount ${BOOTDIR} || true
+while [ -e ${BOOTFSDIR} ] ; do
+  echo "umount ${BOOTFSDIR}"
+  umount ${BOOTFSDIR} || true
   sleep 1s
 done
 while [ -e ${ROOTFSDIR} ] ; do
@@ -58,8 +58,8 @@ while [ -e ${ROOTFSDIR} ] ; do
   umount ${ROOTFSDIR} || true
   sleep 1s
 done
-if [ -e ${BOOTDIR} ] ; then
-  rmdir ${BOOTDIR}
+if [ -e ${BOOTFSDIR} ] ; then
+  rmdir ${BOOTFSDIR}
 fi
 if [ -e ${ROOTFSDIR} ] ; then
   rmdir ${ROOTFSDIR}
@@ -96,19 +96,19 @@ Mount and check if `mount` was successful:
 # -------------------------------------------------------------------------------
 # mount .../bootfs and .../rootfs directory 
 # -------------------------------------------------------------------------------
-mount -o x-mount.mkdir ${SDCARDDEST}1 ${BOOTDIR}
+mount -o x-mount.mkdir ${SDCARDDEST}1 ${BOOTFSDIR}
 mount -o x-mount.mkdir ${SDCARDDEST}2 ${ROOTFSDIR}
 
 # -------------------------------------------------------------------------------
 # check if .../bootfs and .../rootfs directory exists:
 # -------------------------------------------------------------------------------
-echo "is ${BOOTDIR} mounted / available?"
-if [ ! -e ${BOOTDIR} ] ; then
-  echo "mount ${BOOTDIR} first, e.g. :"
-  echo "mount /dev/sdc1 ${BOOTDIR}" 
+echo "is ${BOOTFSDIR} mounted / available?"
+if [ ! -e ${BOOTFSDIR} ] ; then
+  echo "mount ${BOOTFSDIR} first, e.g. :"
+  echo "mount /dev/sdc1 ${BOOTFSDIR}" 
   exit 1
 fi
-echo "${BOOTDIR} is available."
+echo "${BOOTFSDIR} is available."
 echo
 
 echo "is ${ROOTFSDIR} mounted / available?"
@@ -127,14 +127,14 @@ Enable `ssh`:
 # -------------------------------------------------------------------------------
 # create file ssh in /boot:
 # -------------------------------------------------------------------------------
-echo "touch ${BOOTDIR}ssh"
-touch "${BOOTDIR}/ssh"
-echo "touch ${BOOTDIR}ssh - done."
+echo "touch ${BOOTFSDIR}ssh"
+touch "${BOOTFSDIR}/ssh"
+echo "touch ${BOOTFSDIR}ssh - done."
 echo
 ```
 Switch off WLAN and bluetooth like explained by 
 [https://raspberrytips.com/disable-wifi-raspberry-pi/](https://raspberrytips.com/disable-wifi-raspberry-pi/)
-and do some settings for my small screen:
+and do also some settings for my small screen:
 ```
 # -------------------------------------------------------------------------------
 # edit /boot/config.txt
@@ -165,6 +165,7 @@ fi
 echo "configuring ${CONFIGTXT} done."
 echo
 ```
+
 Setup a new user for the headless Raspberry Pi as explained in 
 [http://rptl.io/newuser](http://rptl.io/newuser)...  
 Do not forget to set a better password later!!!
@@ -173,18 +174,23 @@ encpasswd=$(echo '12345678' | openssl passwd -6 -stdin)
 echo ${USERNAME}:${encpasswd} > ${USERCONFTXT}
 ```
 
+Disable vim automatic visual mode on mouse select
+```
+echo 'set mouse-=a' >> ${ROOTFSDIR}etc/skel/.vimrc
+```
+
 ### Umount SD-card
 ```
 # -------------------------------------------------------------------------------
 # umount .../bootfs and .../rootfs directory 
 # -------------------------------------------------------------------------------
 while mount | grep -q ${SDCARDDEST}  ; do
-  echo "trying to umount ${BOOTDIR} and ${ROOTFSDIR}"
-  umount "${BOOTDIR}"   || echo "error unmount ${BOOTDIR}"
+  echo "trying to umount ${BOOTFSDIR} and ${ROOTFSDIR}"
+  umount "${BOOTFSDIR}"   || echo "error unmount ${BOOTFSDIR}"
   umount "${ROOTFSDIR}" || echo "error unmount ${ROOTFSDIR}"
   sleep 1s
 done
-rmdir  "${BOOTDIR}"   || echo "error rmdir ${BOOTDIR}"
+rmdir  "${BOOTFSDIR}"   || echo "error rmdir ${BOOTFSDIR}"
 rmdir  "${ROOTFSDIR}" || echo "error rmdir ${ROOTFSDIR}"
 ```
 
@@ -194,13 +200,129 @@ rmdir  "${ROOTFSDIR}" || echo "error rmdir ${ROOTFSDIR}"
   `ssh fk@<remote-PC-ip-address>`  
   User name "fk" and password "12345678".
 
+## Change standard password of user
+
 ## Update software and firmware
 ```
 sudo apt update
-sudo apt upgrade
-sudo apt dist-upgrade
-sudo apt full-upgrade
+sudo apt -y upgrade
+sudo apt -y dist-upgrade
+sudo apt -y full-upgrade
 sudo rpi-eeprom-update    # checks if a firmware update is needed.
 # sudo apt install rpi-update
 # sudo rpi-update 
 ```
+## Define helper functions
+```
+is_pi () {
+  ARCH=$(dpkg --print-architecture)
+  if [ "$ARCH" = "armhf" ] ; then
+    return 0
+  else
+    return 1
+  fi
+}
+```
+
+## Set environment variables
+```
+TODO
+```
+
+## Install first packages
+TODO : check NAS for further "first" packages and add them here:
+```
+sudo apt -y install vim
+sudo apt -y install screen
+sudo apt -y install ntp
+sudo apt -y install git
+sudo apt -y install watchdog
+
+# Generic Linux input driver, e.g. mouse
+sudo apt -y install xserver-xorg-input-evdev  
+
+# on-screen keyboard, e.g. for touch screens
+sudo apt -y install matchbox-keyboard
+```
+
+## Install all further packages
+```
+  TODO: set variable(s), use logging and modify following:
+
+  echo "step-${CHAPTER}-02" >> $LOGFILE
+  echo "" | tee -a ${LOGFILE}
+  echo "###### check if software packages are available... ############################################################" | tee -a ${LOGFILE}
+  export SW2INSTALL_AVAILABLE=""
+  echo "" >> ${LOGPATH}packages_not-available.txt
+  echo "" >> ${LOGPATH}packages_not-available.txt
+  for i in ${SW2INSTALL} ; do
+     #if sudo dpkg -l "${i}" > /dev/null 2> /dev/null ; then
+     #if apt-cache show "${i}" > /dev/null 2> /dev/null ; then
+     if apt-cache show "${i}" 2> /dev/null | grep -q "^Filename:" ; then
+       export SW2INSTALL_AVAILABLE="${SW2INSTALL_AVAILABLE} ${i}"
+     else
+       echo "${i}" >> ${LOGPATH}packages_not-available.txt
+     fi
+  done
+  echo "###### check which software packages need to be installed ... #################################################" | tee -a ${LOGFILE}
+  export SW2INSTALL=""
+  for i in ${SW2INSTALL_AVAILABLE} ; do
+    if [ $(dpkg-query -W -f='${Status}' "${i}" 2>/dev/null | grep -c "ok installed") -eq 0 ] ; then
+      export SW2INSTALL="${SW2INSTALL} ${i}"
+    fi
+  done
+  echo "----------------------------------------------------------------------------" >> $LOGFILE
+  date >> $LOGFILE
+  echo "----------------------------------------------------------------------------" >> $LOGFILE
+
+  echo "step-${CHAPTER}-03" >> $LOGFILE
+  echo "###### download software packages (start)... ###################################################################" | tee -a ${LOGFILE}
+  echo "" | tee -a ${LOGFILE}
+  sudo apt-get -y install --download-only ${SW2INSTALL}
+  echo "###### ... download software packages (done) ###################################################################" | tee -a ${LOGFILE}
+  echo "----------------------------------------------------------------------------" >> $LOGFILE
+  date >> $LOGFILE
+  echo "----------------------------------------------------------------------------" >> $LOGFILE
+
+  echo "step-${CHAPTER}-04" >> $LOGFILE
+  echo "###### install software packages (start)... ###################################################################" | tee -a ${LOGFILE}
+  echo "" | tee -a ${LOGFILE}
+  for i in ${SW2INSTALL} ; do
+    echo "###############################################################################################################"
+    echo "###### Installing ${i} ######" | tee -a ${LOGFILE}
+    echo -n "${i} " >> ${LOGPATH}installed-sw-1-pre.txt
+    #sudo apt-get -y --force-yes --install-recommends install -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" ${i}
+    sudo apt-get -y --install-recommends install -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" ${i}
+    if [ $? -eq 0 ] ; then
+      echo -n "${i} " >> ${LOGPATH}installed-sw-2-ok.txt
+    else
+      echo "${i}" >> ${LOGPATH}installed-sw-2-error.txt
+    fi
+  done
+  echo "###### ... install software packages (done) ###################################################################" | tee -a ${LOGFILE}
+
+```
+
+
+## Reduce number of writes to SD-card
+
+## Runlevel 3 - no graphic output
+
+## No cleanup of /dev/shm at ssh-logout
+
+## VNC setup
+
+## Nightly reboot
+
+## Samba setup
+
+
+
+
+# Further interesting topics
+## Overlay Filesystem
+See `sudo raspi-config` *-> Performance -> Overlay file system* and also...  
+- [https://github.com/ghollingworth/overlayfs](https://github.com/ghollingworth/overlayfs)
+- [https://yagrebu.net/unix/rpi-overlay.md](https://yagrebu.net/unix/rpi-overlay.md)
+
+## Network print server 
