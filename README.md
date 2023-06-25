@@ -472,6 +472,18 @@ done
 ```
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 ## Setup network
 TODO: Check if this is still up-to-date (I do not think so)
 TODO: Also set network inteface to fixed address
@@ -494,24 +506,109 @@ fi
 ### sudo sed -i $_{CMDLINE} -e "s/ip=[0-9]*.[0-9]*.[0-9]*.[0-9]* *//"
 ```
 
+TODO: check
+```
+netdevice=$(ip -o link show | awk -F': ' '{print $2}' | grep "^en*")
+if ! sed -e 's/#.*$//g' /etc/dhcpcd.conf | grep -q -P 'interface +'"${netdevice}" ; then
+  echo ""                                            | sudo tee -a /etc/dhcpcd.conf
+  echo ""                                            | sudo tee -a /etc/dhcpcd.conf
+  echo "#static IP configuration"                    | sudo tee -a /etc/dhcpcd.conf
+  echo "interface ${netdevice}"                      | sudo tee -a /etc/dhcpcd.conf
+  echo "static ip_address=${PiIPADDRESS}/24"         | sudo tee -a /etc/dhcpcd.conf
+  echo "static routers=${PiROUTERS}"                 | sudo tee -a /etc/dhcpcd.conf
+  echo "static domain_name_servers=${PiNAMESERVERS}" | sudo tee -a /etc/dhcpcd.conf
+  echo ""                                            | sudo tee -a /etc/dhcpcd.conf
+fi
+```
+
 ## Set secondary network IP address and/or further interface 
 
 ## Reduce number of writes to SD-card
+### Create certain folders as RAM-disk (=tmpfs)
+TODO: check
+```
+if ! grep -q "/var/tmp" /etc/fstab ; then
+  echo "# ---- special settings ----------------------------------------------------------------- " | sudo tee -a /etc/fstab
+  echo "#/run, /var/run, /run/lock, /var/run/lock will be automatically created by default - tmpfs" | sudo tee -a /etc/fstab
+  echo "tmpfs /tmp              tmpfs defaults,noatime,nosuid,size=100m                 0 0"        | sudo tee -a /etc/fstab
+  echo "tmpfs /var/tmp          tmpfs defaults,noatime,nosuid,size=30m                  0 0"        | sudo tee -a /etc/fstab
+  echo "#tmpfs /var/log          tmpfs defaults,noatime,mode=0755,size=30m               0 0"        | sudo tee -a /etc/fstab
+  echo "tmpfs /var/spool/mqueue tmpfs defaults,noatime,nosuid,mode=0700,gid=12,size=30m 0 0"        | sudo tee -a /etc/fstab
+  echo "tmpfs /var/cache/samba  tmpfs nodev,nosuid,noatime,size=50m                     0 0"        | sudo tee -a /etc/fstab
+fi
+```
+### Disable swap-file
+TODO: check
+```
+sudo dphys-swapfile swapoff
+sudo systemctl disable dphys-swapfile
+```
+
+## Secure ssh
+TODO: check
+```
+# sudo vi /etc/ssh/sshd_config     # --> PermitRootLogin no
+# sudo vi /etc/fail2ban/jail.conf  # --> bantime=10m   maxretry=5  (default)
+#   [sshd]
+#   enabled = true
+#   port = ssh
+#   filter = sshd
+#   logpath = /var/log/auth.log
+#   maxretry = 3
+#   bantime = 10m
+```
 
 ## No cleanup of /dev/shm at ssh-logout
 TODO: Check if this is still the case!!!
 
 ## VNC setup
-Check setup...
+Check setup if it works and also the window-manager does work...
 ```
 sudo systemctl start vncserver-x11-serviced.service
 vncserver -geometry 1800x1000
 sudo systemctl stop vncserver-x11-serviced.service
 ```
 
-## Automatic nightly reboot
+## Automatic nightly reboot at 2:30
+```
+sudo crontab -e
+   #   30 2 * * * /sbin/shutdown -r now
+```
+
+## Setup of ntp time server
+TODO: Check settings for what they are good for???
+```
+if ! grep -q "server ${_NTPSERVER}" /etc/ntp.conf ; then
+  echo "  configuring /etc/ntp.conf ..." | tee -a ${LOGFILE}
+  sudo sed -i /etc/ntp.conf -e "s/^pool /#pool /"
+  echo ""                                                      | sudo tee -a /etc/ntp.conf
+  echo ""                                                      | sudo tee -a /etc/ntp.conf
+  echo "# set an internal NTP server (min ca. 1h=68min=2^12)"  | sudo tee -a /etc/ntp.conf
+  echo "server ${_NTPSERVER} iburst minpoll 12 maxpoll 17"     | sudo tee -a /etc/ntp.conf
+  echo "#server 0.de.pool.ntp.org  minpoll 12 maxpoll 17"      | sudo tee -a /etc/ntp.conf
+  echo "#server 1.de.pool.ntp.org  minpoll 12 maxpoll 17"      | sudo tee -a /etc/ntp.conf
+  echo "#server 2.de.pool.ntp.org  minpoll 12 maxpoll 17"      | sudo tee -a /etc/ntp.conf
+  echo "#server 3.de.pool.ntp.org  minpoll 12 maxpoll 17"      | sudo tee -a /etc/ntp.conf
+  echo "#server ptbtime1.ptb.de    minpoll 12 maxpoll 17"      | sudo tee -a /etc/ntp.conf
+  echo "# update by hand (in case of trouble):"                | sudo tee -a /etc/ntp.conf
+  echo "#   sudo systemctl stop ntp"                           | sudo tee -a /etc/ntp.conf
+  echo "#   sudo ntpd -qg"                                     | sudo tee -a /etc/ntp.conf
+  echo "#   sudo systemctl start ntp"                          | sudo tee -a /etc/ntp.conf
+  echo "#   ntpq -p"                                           | sudo tee -a /etc/ntp.conf
+  echo ""                                                      | sudo tee -a /etc/ntp.conf
+  echo ""                                                      | sudo tee -a /etc/ntp.conf
+  sudo systemctl restart ntp | tee -a ${LOGFILE}
+fi
+sudo systemctl status ntp
+ntpq -p
+```
 
 ## Samba setup
+TODO: Check settings for what they are good for???
+```
+echo "samba-common    samba-common/do_debconf boolean true"  | sudo debconf-set-selections
+echo "samba-common    samba-common/dhcp       boolean false" | sudo debconf-set-selections
+```
 
 ## Scan open ports and close them
 TODO: check also regarding VNC-server
@@ -529,7 +626,96 @@ sudo apt update
 sudo apt install ubuntu-restricted-extras
 ```
 
+## Mount usbhdd
+```
+# Create mount-point:
+_USBHDDMNTPT=/mnt/usbhdd01
+if [ ! -e "${_USBHDDMNTPT}" ] ; then
+  sudo mkdir -p "${_USBHDDMNTPT}"
+fi
 
+# Check available disks:
+sudo fdisk -l
+
+# Create partition table of USBHDD:
+sudo fdisk /dev/sda
+  # --> n p 1    t 83    p    w
+
+# Format USBHDD:
+sudo mkfs.ext3 -m 1 -L USBHDD01 /dev/sda1
+
+# Get blkid of USBHDD:
+sudo blkid /dev/sda1
+  # --> /dev/sda1: LABEL="USBHDD01" UUID="c6824e93-4e82-4086-b977-f4dd2bf1837b" SEC_TYPE="ext2" BLOCK_SIZE="4096" TYPE="ext3" PARTUUID="7306d5d2-01"
+
+# Edit /etc/fstab:
+# TODO: check the actual settings of the old Raspi
+# UUID=[UUID] /mnt/usbhdd01 [TYPE] defaults,auto,users,rw,nofail,noatime 0 3
+
+```
+
+Check USBHDD using SMART
+TODO: check
+```
+sudo smartctl -d sat --smart=on --offlineauto=on --saveauto=on /dev/sda
+sudo smartctl -d sat -a /dev/sda
+sudo hdparm -I /dev/sda
+sudo smartctl -d sat -t short /dev/sda
+```
+
+## Configure 10inch touchscreen
+TODO: check
+```
+sudo cp /usr/share/X11/xorg.conf.d/10-evdev.conf /usr/share/X11/xorg.conf.d/45-evdev.conf
+echo ''                                                  | sudo tee    /usr/share/X11/xorg.conf.d/99-calibration.conf
+echo 'Section "InputClass"'                              | sudo tee -a /usr/share/X11/xorg.conf.d/99-calibration.conf
+echo '  Identifier "calibration"'                        | sudo tee -a /usr/share/X11/xorg.conf.d/99-calibration.conf
+echo '  MatchProduct "eGalax Inc. USB TouchController"'  | sudo tee -a /usr/share/X11/xorg.conf.d/99-calibration.conf
+echo '  Option "Calibration" "4066 -42 4046 15"'         | sudo tee -a /usr/share/X11/xorg.conf.d/99-calibration.conf
+echo '  Option "SwapAxes" "1"'                           | sudo tee -a /usr/share/X11/xorg.conf.d/99-calibration.conf
+echo '  Driver "evdev"'                                  | sudo tee -a /usr/share/X11/xorg.conf.d/99-calibration.conf
+echo 'EndSection'                                        | sudo tee -a /usr/share/X11/xorg.conf.d/99-calibration.conf
+echo ''                                                  | sudo tee -a /usr/share/X11/xorg.conf.d/99-calibration.conf
+```
+TODO: check
+```
+if ! grep -q "hdmi configuration for 10inch touchscreen" /boot/config.txt ; then
+  echo ""                                              | sudo tee -a /boot/config.txt
+  echo "# hdmi configuration for 10inch touchscreen:"  | sudo tee -a /boot/config.txt
+  echo "hdmi_force_hotplug=1"                          | sudo tee -a /boot/config.txt
+  echo "hdmi_group=2"                                  | sudo tee -a /boot/config.txt
+  echo "hdmi_mode=27"                                  | sudo tee -a /boot/config.txt
+  echo ""                                              | sudo tee -a /boot/config.txt
+fi
+```
+
+## Setup watchdog
+TODO: check
+```
+if ! grep -q "bcm2835_wdt" /etc/modules ; then
+  sudo modprobe bcm2835_wdt
+  echo "bcm2835_wdt" | sudo tee -a /etc/modules
+
+  sudo sed -i /etc/watchdog.conf -e "s/^#max-load-1 /max-load-1 /"
+  sudo sed -i /etc/watchdog.conf -e "s/^#watchdog-device/watchdog-device/"
+  echo ""                             | sudo tee -a /etc/watchdog.conf
+  echo ""                             | sudo tee -a /etc/watchdog.conf
+  echo "watchdog-timeout        = 14" | sudo tee -a /etc/watchdog.conf
+  echo "retry-timeout           = 14" | sudo tee -a /etc/watchdog.conf
+  echo ""                             | sudo tee -a /etc/watchdog.conf
+
+  sudo sed -i /lib/systemd/system/watchdog.service -e "s/^WantedBy=/#WantedBy=/"
+  sudo sed -i /lib/systemd/system/watchdog.service -e '/^#WantedBy=/a\' -e 'WantedBy=multi-user.target'
+  
+  sudo systemctl enable watchdog.service
+  sudo systemctl start watchdog.service
+fi
+sudo systemctl status watchdog 
+
+```
+
+## Stop / disable superfluous services
+TODO
 
 
 
