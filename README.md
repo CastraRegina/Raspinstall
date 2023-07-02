@@ -135,7 +135,6 @@ echo
 Switch off WLAN and bluetooth like explained by 
 [https://raspberrytips.com/disable-wifi-raspberry-pi/](https://raspberrytips.com/disable-wifi-raspberry-pi/)  
 and do also some settings for the 10inch touchscreen:  
-TODO: separate the touchscreen-settings from the wifi-settings!!!
 ```
 # -------------------------------------------------------------------------------
 # edit /boot/config.txt
@@ -151,19 +150,16 @@ if ! grep -q "dtoverlay=disable-wifi" ${CONFIGTXT} ; then
   echo "dtoverlay=disable-wifi"                       >> ${CONFIGTXT}
   echo "dtoverlay=disable-bt"                         >> ${CONFIGTXT}
   echo ""                                             >> ${CONFIGTXT}
+fi
+if ! grep -q "hdmi configuration for 10inch touchscreen" ${CONFIGTXT} ; then
+  echo ""                                             >> ${CONFIGTXT}
   echo "# hdmi configuration for 10inch touchscreen:" >> ${CONFIGTXT}
   echo "hdmi_force_hotplug=1"                         >> ${CONFIGTXT}
   echo "hdmi_group=2"                                 >> ${CONFIGTXT}
   echo "hdmi_mode=27"                                 >> ${CONFIGTXT}
   echo ""                                             >> ${CONFIGTXT}
-  echo "  ${CONFIGTXT} modified." 
-
   sed -i 's/^dtoverlay=vc4-kms-v3d*$/#dtoverlay=vc4-kms-v3d/g' ${CONFIGTXT}
-  echo "  ${CONFIGTXT} modified --> comment out (for 10inch-touchscreen): dtoverlay=vc4-kms-v3d" 
-else
-  echo "  ${CONFIGTXT} already configured (no changes done)."
 fi
-echo "configuring ${CONFIGTXT} done."
 echo
 ```
 
