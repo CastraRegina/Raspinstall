@@ -173,7 +173,9 @@ echo ${USERNAME}:${encpasswd} > ${USERCONFTXT}
 
 Disable vim automatic visual mode on mouse select
 ```
-echo 'set mouse-=a' >> ${ROOTFSDIR}etc/skel/.vimrc
+if ! grep -q "set mouse-=a" ${ROOTFSDIR}etc/skel/.vimrc ; then
+  echo 'set mouse-=a' >> ${ROOTFSDIR}etc/skel/.vimrc
+fi
 ```
 
 ### Umount SD-card
@@ -196,7 +198,8 @@ rmdir  "${ROOTFSDIR}" || echo "error rmdir ${ROOTFSDIR}"
 - Access the Raspberry Pi remotely by using ssh:  
   `ssh fk@<remote-PC-ip-address>`  
   User name "fk" and password "12345678".
-- Info: To call `/usr/bin/raspi-config` script in non-interactive mode, see
+- Info: To call `/usr/bin/raspi-config` script in non-interactive mode,  
+see
 [https://forums.raspberrypi.com/viewtopic.php?t=21632](https://forums.raspberrypi.com/viewtopic.php?t=21632)
 ## Change standard password of user
 ```
