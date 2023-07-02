@@ -144,7 +144,7 @@ if [ ! -e ${CONFIGTXT} ] ; then
   echo "${CONFIGTXT} does not exist!!!"
   exit 5
 fi
-if ! grep -q "dtoverlay=disable-wifi" ${CONFIGTXT} ; then
+if ! grep -q "switch off onboard WLAN and bluetooth" ${CONFIGTXT} ; then
   echo ""                                             >> ${CONFIGTXT}
   echo "# switch off onboard WLAN and bluetooth"      >> ${CONFIGTXT}
   echo "dtoverlay=disable-wifi"                       >> ${CONFIGTXT}
