@@ -1,5 +1,5 @@
 # Raspinstall  
-Personal guide to installing and setting up my Raspberry Pi.  
+Personal guideline to installing and setting up a Raspberry Pi.  
 Scripts should be [idempotent](https://en.wikipedia.org/wiki/Idempotence):
     Regardless of how many times the script is again executed with the same input, the output must always remain the same.
 # Steps to do on your local Linux-PC
@@ -133,8 +133,9 @@ echo "touch ${BOOTFSDIR}ssh - done."
 echo
 ```
 Switch off WLAN and bluetooth like explained by 
-[https://raspberrytips.com/disable-wifi-raspberry-pi/](https://raspberrytips.com/disable-wifi-raspberry-pi/)
-and do also some settings for my small screen:
+[https://raspberrytips.com/disable-wifi-raspberry-pi/](https://raspberrytips.com/disable-wifi-raspberry-pi/)  
+and do also some settings for the 10inch touchscreen:  
+TODO: separate the touchscreen-settings from the wifi-settings!!!
 ```
 # -------------------------------------------------------------------------------
 # edit /boot/config.txt
@@ -147,8 +148,8 @@ fi
 if ! grep -q "dtoverlay=disable-wifi" ${CONFIGTXT} ; then
   echo ""                                             >> ${CONFIGTXT}
   echo "# switch off onboard WLAN and bluetooth"      >> ${CONFIGTXT}
-  echo "dtoverlay=disable-wifi"                   >> ${CONFIGTXT}
-  echo "dtoverlay=disable-bt"                     >> ${CONFIGTXT}
+  echo "dtoverlay=disable-wifi"                       >> ${CONFIGTXT}
+  echo "dtoverlay=disable-bt"                         >> ${CONFIGTXT}
   echo ""                                             >> ${CONFIGTXT}
   echo "# hdmi configuration for 10inch touchscreen:" >> ${CONFIGTXT}
   echo "hdmi_force_hotplug=1"                         >> ${CONFIGTXT}
@@ -167,7 +168,7 @@ echo
 ```
 
 Setup a new user for the headless Raspberry Pi as explained in 
-[http://rptl.io/newuser](http://rptl.io/newuser)...  
+[http://rptl.io/newuser](http://rptl.io/newuser) ...  
 Do not forget to set a better password later!!!
 ```
 encpasswd=$(echo '12345678' | openssl passwd -6 -stdin)
@@ -248,7 +249,7 @@ else
 fi
 
 
-_SW2INSTALL="pv xterm smartmontools geeqie xserver-xorg-input-evdev xinput-calibrator matchbox-keyboard git gcc build-essential cmake v4l-utils ffmpeg vlc vlc-bin autoconf-archive gnu-standards autoconf-doc dh-make gettext-doc libasprintf-dev libgettextpo-dev libtool-doc gfortran mplayer gnome-mplayer gecko-mediaplayer gphoto2 parted gparted iftop net-tools netstat-nat netcat fbi autocutsel epiphany-browser gpsd gpsd-clients python-gps python-gobject-2-dbg python-gtk2-doc devhelp python-gdbm-dbg python-tk-dbg iw wpasupplicant wireless-tools python-pil.imagetk libjpeg62-turbo libjpeg62-turbo-dev libavformat-dev python-pil-doc python-pil.imagetk-dbg python-doc python-examples python-pil.imagetk libjpeg62-turbo libjpeg62-turbo-dev libavcodec-dev libc6-dev zlib1g-dev libpq5 libpq-dev vim exuberant-ctags vim-doc vim-scripts libtemplate-perl libtemplate-perl-doc libtemplate-plugin-gd-perl libtemplate-plugin-xml-perl screen realvnc-vnc-server realvnc-vnc-viewer colord-sensor-argyll foomatic-db printer-driver-hpcups hplip printer-driver-cups-pdf antiword docx2txt gutenprint-locales ooo2dbk gutenprint-doc unpaper realvnc-vnc-server realvnc-vnc-viewer hdparm nfs-kernel-server nfs-common autofs fail2ban ntfs-3g hfsutils hfsprogs exfat-fuse iotop evince argyll-doc gir1.2-colordgtk-1.0 codeblocks ca-certificates-java openjdk-8-jre-headless openjdk-8-jre openjdk-8-jdk-headless openjdk-8-jdk icedtea-netx icedtea-8-plugin eclipse ninja-build xpp spf-tools-perl swaks monit openprinting-ppds foomatic-db-gutenprint gimp xpaint libjpeg-progs ufraw gfortran-6-doc libgfortran3-dbg libcoarrays-dev ghostscript-x xfsprogs reiserfsprogs reiser4progs jfsutils mtools yelp kpartx dmraid gpart gthumb pdftk gimp-gutenprint ijsgutenprint apmd hfsutils-tcltk hplip-doc hplip-gui python3-notify2 system-config-printer imagemagick-doc autotrace enscript gnuplot grads graphviz hp2xx html2ps libwmf-bin povray radiance texlive-binaries fig2dev libgtk2.0-doc libdigest-hmac-perl libgssapi-perl fonts-dustin libgda-5.0-bin libgda-5.0-mysql libgda-5.0-postgres libgmlib1-dbg libgmtk1-dbg gpgsm libdata-dump-perl libcrypt-ssleay-perl inkscape libparted-dev postgresql-doc sg3-utils snmp-mibs-downloader libauthen-ntlm-perl m4-doc mailutils-mh mailutils-doc docbook-xsl libmail-box-perl psutils hpijs-ppds magicfilter python-gpgme python-pexpect-doc python3-renderpm-dbg python-reportlab-doc bind9 bind9utils ctdb ldb-tools smbldap-tools winbind ufw byobu gsmartcontrol smart-notifier openssl-blacklist tcl-tclreadline xfonts-cyrillic vnstat tcpdump unzip pkg-config libjpeg-dev libpng-dev libtiff-dev libswscale-dev libv4l-dev libxvidcore-dev libx264-dev libgtk-3-dev libcanberra-gtk* libatlas-base-dev python3-dev libblas-doc liblapack-doc liblapack-dev liblapack-doc-man libcairo2-doc icu-doc liblzma-doc libxext-doc iperf aptitude firefox-esr samba samba-common-bin smbclient btrfs-progs btrfs-tools python-dev python-pip ffmpeg libffi-dev libxml2-dev libxslt-dev libcairo2 libgeos++-dev libgeos-dev libgeos-doc libjpeg-dev libtiff5-dev libpng-dev libfreetype6-dev libgif-dev libgtk-3-dev libxml2-dev libpango1.0-dev libcairo2-dev libspiro-dev python3-dev ninja-build cmake build-essential gettext"
+_SW2INSTALL="pv xterm smartmontools geeqie xserver-xorg-input-evdev xinput-calibrator matchbox-keyboard git gcc build-essential cmake v4l-utils ffmpeg vlc vlc-bin autoconf-archive gnu-standards autoconf-doc dh-make gettext-doc libasprintf-dev libgettextpo-dev libtool-doc gfortran mplayer gnome-mplayer gecko-mediaplayer gphoto2 parted gparted iftop net-tools netstat-nat netcat fbi autocutsel epiphany-browser gpsd gpsd-clients python-gps python-gobject-2-dbg python-gtk2-doc devhelp python-gdbm-dbg python-tk-dbg iw wpasupplicant wireless-tools python-pil.imagetk libjpeg62-turbo libjpeg62-turbo-dev libavformat-dev python-pil-doc python-pil.imagetk-dbg python-doc python-examples python-pil.imagetk libjpeg62-turbo libjpeg62-turbo-dev libavcodec-dev libc6-dev zlib1g-dev libpq5 libpq-dev vim exuberant-ctags vim-doc vim-scripts libtemplate-perl libtemplate-perl-doc libtemplate-plugin-gd-perl libtemplate-plugin-xml-perl screen realvnc-vnc-server realvnc-vnc-viewer colord-sensor-argyll foomatic-db cups printer-driver-hpcups hplip printer-driver-cups-pdf antiword docx2txt gutenprint-locales ooo2dbk gutenprint-doc unpaper realvnc-vnc-server realvnc-vnc-viewer hdparm nfs-kernel-server nfs-common autofs fail2ban ntfs-3g hfsutils hfsprogs exfat-fuse iotop evince argyll-doc gir1.2-colordgtk-1.0 codeblocks ca-certificates-java openjdk-8-jre-headless openjdk-8-jre openjdk-8-jdk-headless openjdk-8-jdk icedtea-netx icedtea-8-plugin eclipse ninja-build xpp spf-tools-perl swaks monit openprinting-ppds foomatic-db-gutenprint gimp xpaint libjpeg-progs ufraw gfortran-6-doc libgfortran3-dbg libcoarrays-dev ghostscript-x xfsprogs reiserfsprogs reiser4progs jfsutils mtools yelp kpartx dmraid gpart gthumb pdftk gimp-gutenprint ijsgutenprint apmd hfsutils-tcltk hplip-doc hplip-gui python3-notify2 system-config-printer imagemagick-doc autotrace enscript gnuplot grads graphviz hp2xx html2ps libwmf-bin povray radiance texlive-binaries fig2dev libgtk2.0-doc libdigest-hmac-perl libgssapi-perl fonts-dustin libgda-5.0-bin libgda-5.0-mysql libgda-5.0-postgres libgmlib1-dbg libgmtk1-dbg gpgsm libdata-dump-perl libcrypt-ssleay-perl inkscape libparted-dev postgresql-doc sg3-utils snmp-mibs-downloader libauthen-ntlm-perl m4-doc mailutils-mh mailutils-doc docbook-xsl libmail-box-perl psutils hpijs-ppds magicfilter python-gpgme python-pexpect-doc python3-renderpm-dbg python-reportlab-doc bind9 bind9utils ctdb ldb-tools smbldap-tools winbind ufw byobu gsmartcontrol smart-notifier openssl-blacklist tcl-tclreadline xfonts-cyrillic vnstat tcpdump unzip pkg-config libjpeg-dev libpng-dev libtiff-dev libswscale-dev libv4l-dev libxvidcore-dev libx264-dev libgtk-3-dev libcanberra-gtk* libatlas-base-dev python3-dev libblas-doc liblapack-doc liblapack-dev liblapack-doc-man libcairo2-doc icu-doc liblzma-doc libxext-doc iperf aptitude firefox-esr samba samba-common-bin smbclient btrfs-progs btrfs-tools python-dev python-pip ffmpeg libffi-dev libxml2-dev libxslt-dev libcairo2 libgeos++-dev libgeos-dev libgeos-doc libjpeg-dev libtiff5-dev libpng-dev libfreetype6-dev libgif-dev libgtk-3-dev libxml2-dev libpango1.0-dev libcairo2-dev libspiro-dev python3-dev ninja-build cmake build-essential gettext"
 
 
 # -------------------------------------------------------------------------------
@@ -485,6 +486,26 @@ done
 
 
 ## Setup network
+The predictable name for eth0 can be found with:
+```
+udevadm test-builtin net_id /sys/class/net/eth0 | grep '^ID_NET_NAME_'
+```
+https://serverfault.com/questions/856850/predictable-network-interface-names-in-systemd/858313
+https://wiki.debian.org/NetworkInterfaceNames#THE_.22PERSISTENT_NAMES.22_SCHEME
+```
+  if [ $RET -eq 0 ]; then
+    sed -i $CMDLINE -e "s/net.ifnames=0 *//"
+    rm -f /etc/systemd/network/99-default.link
+    rm -f /etc/systemd/network/73-usb-net-by-mac.link
+    STATUS=enabled
+  elif [ $RET -eq 1 ]; then
+    ln -sf /dev/null /etc/systemd/network/99-default.link
+    ln -sf /dev/null /etc/systemd/network/73-usb-net-by-mac.link
+    STATUS=disabled
+```
+
+
+
 TODO: Check if this is still up-to-date (I do not think so)
 TODO: Also set network inteface to fixed address
 ```
@@ -562,7 +583,7 @@ TODO: check
 TODO: Check if this is still the case!!!
 
 ## VNC setup
-Check setup if it works and also the window-manager does work...
+Check the setup if it works and if also the window-manager does work...
 ```
 sudo systemctl start vncserver-x11-serviced.service
 vncserver -geometry 1800x1000
@@ -614,6 +635,7 @@ echo "samba-common    samba-common/dhcp       boolean false" | sudo debconf-set-
 TODO: check also regarding VNC-server
 ```
 nmap -p- 192.168.2.163
+nmap -sT -p 1-65535 192.168.2.163
 ```
  
 ## Collect and save weather-data
@@ -627,6 +649,11 @@ sudo apt install ubuntu-restricted-extras
 ```
 
 ## Mount usbhdd
+Check if still needed:
+```
+sudo vi /boot/config.txt
+  # max_usb_current=1
+```
 ```
 # Create mount-point:
 _USBHDDMNTPT=/mnt/usbhdd01
@@ -717,9 +744,67 @@ sudo systemctl status watchdog
 ## Stop / disable superfluous services
 TODO
 
+### Services
+
+### Regular update jobs
+
+
+# Optional setups
+## Network print server
+See also [https://www.tomshardware.com/how-to/raspberry-pi-print-server](https://www.tomshardware.com/how-to/raspberry-pi-print-server)  
+or [https://medium.com/@anirudhgupta281998/setup-a-print-server-using-raspberry-pi-cups-part-2-2d6d48ccdc32](https://medium.com/@anirudhgupta281998/setup-a-print-server-using-raspberry-pi-cups-part-2-2d6d48ccdc32)  
+or [https://opensource.com/article/18/3/print-server-raspberry-pi](https://opensource.com/article/18/3/print-server-raspberry-pi)
+- Make sure cups is installed
+  ```
+  sudo apt install cups
+  ```
+- Check if the standard user is already member of group `lpadmin` by: `id $USER`.  
+  If not, do a
+  ```
+  sudo usermod -a -G lpadmin $USER`
+  ```
+- Does the Raspi already have a static IP-address? Check `/etc/dhcpcd.conf`. 
+- Make CUPS accessible across the network
+  ```
+  sudo cupsctl --remote-any
+  ```
+- Connect with port `631` of the Raspi using a webbrowser.  
+  Configure the printer:
+  - `Administration` -> `Add Printer`
+  - Select local printer
+  - Share this printer (checkbox)
+  - Select model (first entry: HP LaserJet 1100, hpcups 3.21.2 (en))
+  - Set default options (Check `Media Size: A4` and `Print Quality: Best`)
+  - Goto `Printers`-Tab and print a test page
+- TODO:
+  - Check if SAMBA settings are needed to access the printer from Windows
+  - Check if these settings are persistent
+
+
+
 
 
 # Further interesting topics
+
+
+## Retrieve informations
+```
+# Linux kernel version
+uname -a
+
+# OS release version
+cat /etc/os-release
+
+# Rasperry Pi model
+cat /sys/firmware/devicetree/base/model 
+```
+
+## Check network performance
+```
+iperf -s               # at server
+iperf -c 192.168.x.y   # at client
+```
+
 ## Overlay Filesystem
 See `sudo raspi-config` *-> Performance -> Overlay file system* and also...  
 - [https://github.com/ghollingworth/overlayfs](https://github.com/ghollingworth/overlayfs)
