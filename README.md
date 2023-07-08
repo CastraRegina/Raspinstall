@@ -2,6 +2,12 @@
 Personal guideline to installing and setting up a Raspberry Pi.  
 Scripts should be [idempotent](https://en.wikipedia.org/wiki/Idempotence):
     Regardless of how many times the script is again executed with the same input, the output must always remain the same.
+
+# Content
+- [Steps to do on your local Linux-PC](#steps-to-do-on-your-local-linux-pc)
+- [Steps to do on your remote Raspberry Pi](#steps-to-do-on-your-remote-raspberry-pi)
+
+
 # Steps to do on your local Linux-PC
 ## Clone this repository
 `git clone git@github.com:CastraRegina/Raspinstall.git`
@@ -163,8 +169,9 @@ fi
 echo
 ```
 
-Setup a new user for the headless Raspberry Pi as explained in 
-[http://rptl.io/newuser](http://rptl.io/newuser) ...  
+Setup a new user for the headless Raspberry Pi as explained in   
+[http://rptl.io/newuser](http://rptl.io/newuser)  
+or [https://github.com/raspberrypi/documentation/blob/develop/documentation/asciidoc/computers/configuration/headless.adoc](https://github.com/raspberrypi/documentation/blob/develop/documentation/asciidoc/computers/configuration/headless.adoc) ...  
 Do not forget to set a better password later!!!
 ```
 encpasswd=$(echo '12345678' | openssl passwd -6 -stdin)
@@ -192,6 +199,12 @@ done
 rmdir  "${BOOTFSDIR}"   || echo "error rmdir ${BOOTFSDIR}"
 rmdir  "${ROOTFSDIR}" || echo "error rmdir ${ROOTFSDIR}"
 ```
+
+
+---
+---
+---
+
 
 # Steps to do on your remote Raspberry Pi
 - Insert SD-card and boot.
@@ -248,7 +261,7 @@ else
 fi
 
 
-_SW2INSTALL="pv xterm smartmontools geeqie xserver-xorg-input-evdev xinput-calibrator matchbox-keyboard git gcc build-essential cmake v4l-utils ffmpeg vlc vlc-bin autoconf-archive gnu-standards autoconf-doc dh-make gettext-doc libasprintf-dev libgettextpo-dev libtool-doc gfortran mplayer gnome-mplayer gecko-mediaplayer gphoto2 parted gparted iftop net-tools netstat-nat netcat fbi autocutsel epiphany-browser gpsd gpsd-clients python-gps python-gobject-2-dbg python-gtk2-doc devhelp python-gdbm-dbg python-tk-dbg iw wpasupplicant wireless-tools python-pil.imagetk libjpeg62-turbo libjpeg62-turbo-dev libavformat-dev python-pil-doc python-pil.imagetk-dbg python-doc python-examples python-pil.imagetk libjpeg62-turbo libjpeg62-turbo-dev libavcodec-dev libc6-dev zlib1g-dev libpq5 libpq-dev vim exuberant-ctags vim-doc vim-scripts libtemplate-perl libtemplate-perl-doc libtemplate-plugin-gd-perl libtemplate-plugin-xml-perl screen realvnc-vnc-server realvnc-vnc-viewer colord-sensor-argyll foomatic-db cups printer-driver-hpcups hplip printer-driver-cups-pdf antiword docx2txt gutenprint-locales ooo2dbk gutenprint-doc unpaper realvnc-vnc-server realvnc-vnc-viewer hdparm nfs-kernel-server nfs-common autofs fail2ban ntfs-3g hfsutils hfsprogs exfat-fuse iotop evince argyll-doc gir1.2-colordgtk-1.0 codeblocks ca-certificates-java openjdk-8-jre-headless openjdk-8-jre openjdk-8-jdk-headless openjdk-8-jdk icedtea-netx icedtea-8-plugin eclipse ninja-build xpp spf-tools-perl swaks monit openprinting-ppds foomatic-db-gutenprint gimp xpaint libjpeg-progs ufraw gfortran-6-doc libgfortran3-dbg libcoarrays-dev ghostscript-x xfsprogs reiserfsprogs reiser4progs jfsutils mtools yelp kpartx dmraid gpart gthumb pdftk gimp-gutenprint ijsgutenprint apmd hfsutils-tcltk hplip-doc hplip-gui python3-notify2 system-config-printer imagemagick-doc autotrace enscript gnuplot grads graphviz hp2xx html2ps libwmf-bin povray radiance texlive-binaries fig2dev libgtk2.0-doc libdigest-hmac-perl libgssapi-perl fonts-dustin libgda-5.0-bin libgda-5.0-mysql libgda-5.0-postgres libgmlib1-dbg libgmtk1-dbg gpgsm libdata-dump-perl libcrypt-ssleay-perl inkscape libparted-dev postgresql-doc sg3-utils snmp-mibs-downloader libauthen-ntlm-perl m4-doc mailutils-mh mailutils-doc docbook-xsl libmail-box-perl psutils hpijs-ppds magicfilter python-gpgme python-pexpect-doc python3-renderpm-dbg python-reportlab-doc bind9 bind9utils ctdb ldb-tools smbldap-tools winbind ufw byobu gsmartcontrol smart-notifier openssl-blacklist tcl-tclreadline xfonts-cyrillic vnstat tcpdump unzip pkg-config libjpeg-dev libpng-dev libtiff-dev libswscale-dev libv4l-dev libxvidcore-dev libx264-dev libgtk-3-dev libcanberra-gtk* libatlas-base-dev python3-dev libblas-doc liblapack-doc liblapack-dev liblapack-doc-man libcairo2-doc icu-doc liblzma-doc libxext-doc iperf aptitude firefox-esr samba samba-common-bin smbclient btrfs-progs btrfs-tools python-dev python-pip ffmpeg libffi-dev libxml2-dev libxslt-dev libcairo2 libgeos++-dev libgeos-dev libgeos-doc libjpeg-dev libtiff5-dev libpng-dev libfreetype6-dev libgif-dev libgtk-3-dev libxml2-dev libpango1.0-dev libcairo2-dev libspiro-dev python3-dev ninja-build cmake build-essential gettext"
+_SW2INSTALL="pv xterm smartmontools geeqie xserver-xorg-input-evdev xinput-calibrator matchbox-keyboard git gcc build-essential cmake v4l-utils ffmpeg vlc vlc-bin autoconf-archive gnu-standards autoconf-doc dh-make gettext-doc libasprintf-dev libgettextpo-dev libtool-doc gfortran mplayer gnome-mplayer gecko-mediaplayer gphoto2 parted gparted iftop net-tools netstat-nat netcat fbi autocutsel epiphany-browser gpsd gpsd-clients python-gps python-gobject-2-dbg python-gtk2-doc devhelp python-gdbm-dbg python-tk-dbg iw wpasupplicant wireless-tools python-pil.imagetk libjpeg62-turbo libjpeg62-turbo-dev libavformat-dev python-pil-doc python-pil.imagetk-dbg python-doc python-examples python-pil.imagetk libjpeg62-turbo libjpeg62-turbo-dev libavcodec-dev libc6-dev zlib1g-dev libpq5 libpq-dev vim exuberant-ctags vim-doc vim-scripts libtemplate-perl libtemplate-perl-doc libtemplate-plugin-gd-perl libtemplate-plugin-xml-perl screen realvnc-vnc-server realvnc-vnc-viewer colord-sensor-argyll foomatic-db cups printer-driver-hpcups hplip printer-driver-cups-pdf antiword docx2txt gutenprint-locales ooo2dbk gutenprint-doc unpaper realvnc-vnc-server realvnc-vnc-viewer hdparm nfs-kernel-server nfs-common autofs fail2ban ntfs-3g hfsutils hfsprogs exfat-fuse iotop evince argyll-doc gir1.2-colordgtk-1.0 codeblocks ca-certificates-java openjdk-8-jre-headless openjdk-8-jre openjdk-8-jdk-headless openjdk-8-jdk icedtea-netx icedtea-8-plugin eclipse ninja-build xpp spf-tools-perl swaks monit openprinting-ppds foomatic-db-gutenprint gimp xpaint libjpeg-progs ufraw gfortran-6-doc libgfortran3-dbg libcoarrays-dev ghostscript-x xfsprogs reiserfsprogs reiser4progs jfsutils mtools yelp kpartx dmraid gpart gthumb pdftk gimp-gutenprint ijsgutenprint apmd hfsutils-tcltk hplip-doc hplip-gui python3-notify2 system-config-printer imagemagick-doc autotrace enscript gnuplot grads graphviz hp2xx html2ps libwmf-bin povray radiance texlive-binaries fig2dev libgtk2.0-doc libdigest-hmac-perl libgssapi-perl fonts-dustin libgda-5.0-bin libgda-5.0-mysql libgda-5.0-postgres libgmlib1-dbg libgmtk1-dbg gpgsm libdata-dump-perl libcrypt-ssleay-perl inkscape libparted-dev postgresql-doc sg3-utils snmp-mibs-downloader libauthen-ntlm-perl m4-doc mailutils-mh mailutils-doc docbook-xsl libmail-box-perl psutils hpijs-ppds magicfilter python-gpgme python-pexpect-doc python3-renderpm-dbg python-reportlab-doc bind9 bind9utils ctdb ldb-tools smbldap-tools winbind ufw byobu gsmartcontrol smart-notifier openssl-blacklist tcl-tclreadline xfonts-cyrillic vnstat tcpdump unzip pkg-config libjpeg-dev libpng-dev libtiff-dev libswscale-dev libv4l-dev libxvidcore-dev libx264-dev libgtk-3-dev libcanberra-gtk* libatlas-base-dev python3-dev libblas-doc liblapack-doc liblapack-dev liblapack-doc-man libcairo2-doc icu-doc liblzma-doc libxext-doc iperf aptitude firefox-esr samba samba-common-bin smbclient btrfs-progs btrfs-tools python-dev python-pip ffmpeg libffi-dev libxml2-dev libxslt-dev libcairo2 libgeos++-dev libgeos-dev libgeos-doc libjpeg-dev libtiff5-dev libpng-dev libfreetype6-dev libgif-dev libgtk-3-dev libxml2-dev libpango1.0-dev libcairo2-dev libspiro-dev python3-dev ninja-build cmake build-essential gettext keepassx"
 
 
 # -------------------------------------------------------------------------------
@@ -320,7 +333,7 @@ fi
 
 
 # -------------------------------------------------------------------------------
-# Enable ssh permanently
+# Enable ssh permanently   (0=enable, 1=disable)
 # -------------------------------------------------------------------------------
 sudo systemctl enable ssh
 if is_pi ; then
@@ -471,76 +484,68 @@ for i in ${SW2INSTALL} ; do
 done
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## Setup network
-The predictable name for eth0 can be found with:
-```
-udevadm test-builtin net_id /sys/class/net/eth0 | grep '^ID_NET_NAME_'
-```
-https://serverfault.com/questions/856850/predictable-network-interface-names-in-systemd/858313
-https://wiki.debian.org/NetworkInterfaceNames#THE_.22PERSISTENT_NAMES.22_SCHEME
-```
-  if [ $RET -eq 0 ]; then
-    sed -i $CMDLINE -e "s/net.ifnames=0 *//"
-    rm -f /etc/systemd/network/99-default.link
-    rm -f /etc/systemd/network/73-usb-net-by-mac.link
-    STATUS=enabled
-  elif [ $RET -eq 1 ]; then
-    ln -sf /dev/null /etc/systemd/network/99-default.link
-    ln -sf /dev/null /etc/systemd/network/73-usb-net-by-mac.link
-    STATUS=disabled
-```
+Background information regarding predictable network interface names:
+- [https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/](https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/)
+- [https://www.freedesktop.org/software/systemd/man/systemd.net-naming-scheme.html](https://www.freedesktop.org/software/systemd/man/systemd.net-naming-scheme.html)
 
+The predictable name for eth0 can be found with:  
+`udevadm test-builtin net_id /sys/class/net/eth0 | grep '^ID_NET_NAME_'`
 
-
-TODO: Check if this is still up-to-date (I do not think so)
-TODO: Also set network inteface to fixed address
+With current `raspi-config` (2023-07-08) the predictable network names will not be enabled.  
+Therefore a workaround is mentioned here in the
+[Raspberry Pi Forum](https://forums.raspberrypi.com/viewtopic.php?t=258195).  
+See also [https://wiki.debian.org/NetworkInterfaceNames#THE_.22PERSISTENT_NAMES.22_SCHEME](https://wiki.debian.org/NetworkInterfaceNames#THE_.22PERSISTENT_NAMES.22_SCHEME).
 ```
 # -------------------------------------------------------------------------------
-# Use predictable network interface names
+# Use predictable network interface names   (0=enable, 1=disable)
 # -------------------------------------------------------------------------------
-### sudo sed -i ${_CMDLINE} -e "s/net.ifnames=0 *//"
-### if [ -e /etc/systemd/network/99-default.link ] ; then
-###   sudo rm -f /etc/systemd/network/99-default.link || { echo "rm -f /etc/systemd/network/99-default.link   failed" ; exit 1; }
-### fi
 if is_pi ; then
   sudo raspi-config nonint do_net_names 0
+  if [ -e /etc/systemd/network/99-default.link ] ; then
+    sudo rm -f /etc/systemd/network/99-default.link
+  fi
+  # workaround in order to enable predictable network interfaces:
+  echo "[Match]"                     | sudo tee -a /etc/systemd/network/99-default.link
+  echo "OriginalName=*"              | sudo tee -a /etc/systemd/network/99-default.link
+  echo ""                            | sudo tee -a /etc/systemd/network/99-default.link
+  echo "[Link]"                      | sudo tee -a /etc/systemd/network/99-default.link
+  echo "NamePolicy=mac"              | sudo tee -a /etc/systemd/network/99-default.link
+  echo "MACAddressPolicy=persistent" | sudo tee -a /etc/systemd/network/99-default.link
 fi
 
 
 # -------------------------------------------------------------------------------
 # Removing ip-info from $_CMDLINE
 # -------------------------------------------------------------------------------
-### sudo sed -i $_{CMDLINE} -e "s/ip=[0-9]*.[0-9]*.[0-9]*.[0-9]* *//"
-```
+if is_pi ; then
+  ### sudo sed -i ${_CMDLINE} -e "s/ip=[0-9]*.[0-9]*.[0-9]*.[0-9]* *//"
+fi
 
-TODO: check
-```
-netdevice=$(ip -o link show | awk -F': ' '{print $2}' | grep "^en*")
-if ! sed -e 's/#.*$//g' /etc/dhcpcd.conf | grep -q -P 'interface +'"${netdevice}" ; then
-  echo ""                                            | sudo tee -a /etc/dhcpcd.conf
-  echo ""                                            | sudo tee -a /etc/dhcpcd.conf
-  echo "#static IP configuration"                    | sudo tee -a /etc/dhcpcd.conf
-  echo "interface ${netdevice}"                      | sudo tee -a /etc/dhcpcd.conf
-  echo "static ip_address=${PiIPADDRESS}/24"         | sudo tee -a /etc/dhcpcd.conf
-  echo "static routers=${PiROUTERS}"                 | sudo tee -a /etc/dhcpcd.conf
-  echo "static domain_name_servers=${PiNAMESERVERS}" | sudo tee -a /etc/dhcpcd.conf
-  echo ""                                            | sudo tee -a /etc/dhcpcd.conf
+
+# -------------------------------------------------------------------------------
+# Set static IP address for "eth0" i.e. the en* network device
+# -------------------------------------------------------------------------------
+if is_pi ; then
+  ### netdevice=$(ip -o link show | awk -F': ' '{print $2}' | grep "^en*")
+  netdevice=$(udevadm test-builtin net_id /sys/class/net/enxdca632250905 2>/dev/null | grep 'ID_NET_NAME_MAC=' | cut -d= -f2-)
+  if ! sed -e 's/#.*$//g' /etc/dhcpcd.conf | grep -q -P 'interface +'"${netdevice}" ; then
+    echo ""                                            | sudo tee -a /etc/dhcpcd.conf
+    echo "# static IP configuration"                   | sudo tee -a /etc/dhcpcd.conf
+    echo "interface ${netdevice}"                      | sudo tee -a /etc/dhcpcd.conf
+    echo "static ip_address=${_IPADDRESS}/24"          | sudo tee -a /etc/dhcpcd.conf
+    echo "static routers=${_ROUTERS}"                  | sudo tee -a /etc/dhcpcd.conf
+    echo "static domain_name_servers=${_NAMESERVERS}"  | sudo tee -a /etc/dhcpcd.conf
+    echo ""                                            | sudo tee -a /etc/dhcpcd.conf
+  fi
 fi
 ```
 
+
+
+
+
+# TODO : GO ON HERE ...
 ## Set secondary network IP address and/or further interface 
 
 ## Reduce number of writes to SD-card
@@ -599,7 +604,6 @@ sudo crontab -e
 TODO: Check settings for what they are good for???
 ```
 if ! grep -q "server ${_NTPSERVER}" /etc/ntp.conf ; then
-  echo "  configuring /etc/ntp.conf ..." | tee -a ${LOGFILE}
   sudo sed -i /etc/ntp.conf -e "s/^pool /#pool /"
   echo ""                                                      | sudo tee -a /etc/ntp.conf
   echo ""                                                      | sudo tee -a /etc/ntp.conf
