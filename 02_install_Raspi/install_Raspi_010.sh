@@ -348,3 +348,6 @@ if is_pi ; then
   nmcli connection 
   sudo cat /etc/NetworkManager/system-connections/*
 fi
+
+echo
+echo "Now do a sudo reboot"

@@ -567,6 +567,9 @@ if is_pi ; then
   nmcli connection 
   sudo cat /etc/NetworkManager/system-connections/*
 fi
+
+echo
+echo "Now do a sudo reboot"
 ```
 
 Howto set a static IP address, see [https://linux.fernandocejas.com/docs/how-to/set-static-ip-address](https://linux.fernandocejas.com/docs/how-to/set-static-ip-address) .  
