@@ -10,7 +10,11 @@ Scripts should be [idempotent](https://en.wikipedia.org/wiki/Idempotence):
 
 # Steps to do on your local Linux-PC
 ## Clone this repository
-`git clone git@github.com:CastraRegina/Raspinstall.git`
+```
+git clone git@github.com:CastraRegina/Raspinstall.git
+git clone https://github.com/CastraRegina/Raspinstall.git
+```
+
 ## Download image(s)
 Download [Raspberry Pi OS](https://www.raspberrypi.com/software/operating-systems/):  
 For example `2023-05-03-raspios-bullseye-armhf-full.img.xz`:  
@@ -242,6 +246,7 @@ is_pi () {
 # -------------------------------------------------------------------------------
 _HOSTNAME="lasrv04"
 _IPADDRESS="192.168.2.4"
+_DOMAIN="ladomain"
 _ROUTERS="192.168.2.1"
 _NAMESERVERS="192.168.2.1"
 _NTPSERVER="192.168.2.1"
@@ -319,6 +324,9 @@ if is_pi ; then
 
   # on-screen keyboard, e.g. for touch screens
   sudo apt -y install matchbox-keyboard
+
+  # use network manager instead of dhcpcd
+  sudo apt -y install network-manager network-manager-gnome
 fi
 ```
 
@@ -519,7 +527,16 @@ fi
 # Removing ip-info from $_CMDLINE
 # -------------------------------------------------------------------------------
 if is_pi ; then
+  echo ""
   ### sudo sed -i ${_CMDLINE} -e "s/ip=[0-9]*.[0-9]*.[0-9]*.[0-9]* *//"
+fi
+
+
+# -------------------------------------------------------------------------------
+# Use "network manager" (2) instead of "dhcpcd" (1) 
+# -------------------------------------------------------------------------------
+if is_pi ; then
+  sudo raspi-config nonint do_netconf 2
 fi
 
 
@@ -529,17 +546,41 @@ fi
 if is_pi ; then
   ### netdevice=$(ip -o link show | awk -F': ' '{print $2}' | grep "^en*")
   netdevice=$(udevadm test-builtin net_id /sys/class/net/enxdca632250905 2>/dev/null | grep 'ID_NET_NAME_MAC=' | cut -d= -f2-)
-  if ! sed -e 's/#.*$//g' /etc/dhcpcd.conf | grep -q -P 'interface +'"${netdevice}" ; then
-    echo ""                                            | sudo tee -a /etc/dhcpcd.conf
-    echo "# static IP configuration"                   | sudo tee -a /etc/dhcpcd.conf
-    echo "interface ${netdevice}"                      | sudo tee -a /etc/dhcpcd.conf
-    echo "static ip_address=${_IPADDRESS}/24"          | sudo tee -a /etc/dhcpcd.conf
-    echo "static routers=${_ROUTERS}"                  | sudo tee -a /etc/dhcpcd.conf
-    echo "static domain_name_servers=${_NAMESERVERS}"  | sudo tee -a /etc/dhcpcd.conf
-    echo ""                                            | sudo tee -a /etc/dhcpcd.conf
-  fi
+  connUUID=$(nmcli --fields UUID connection show --active | grep -v UUID | head -n 1 | sed 's/ *$//g')
+  # dhcpcd.conf is obsolete as "network manager" is used:
+  # if ! sed -e 's/#.*$//g' /etc/dhcpcd.conf | grep -q -P 'interface +'"${netdevice}" ; then
+  #   echo ""                                            | sudo tee -a /etc/dhcpcd.conf
+  #   echo "# static IP configuration"                   | sudo tee -a /etc/dhcpcd.conf
+  #   echo "interface ${netdevice}"                      | sudo tee -a /etc/dhcpcd.conf
+  #   echo "static ip_address=${_IPADDRESS}/24"          | sudo tee -a /etc/dhcpcd.conf
+  #   echo "static routers=${_ROUTERS}"                  | sudo tee -a /etc/dhcpcd.conf
+  #   echo "static domain_name_servers=${_NAMESERVERS}"  | sudo tee -a /etc/dhcpcd.conf
+  #   echo ""                                            | sudo tee -a /etc/dhcpcd.conf
+  # fi
+  # modify connection using "network manager" nmcli: 
+  sudo nmcli connection modify "${connUUID}" \
+    ipv4.addresses "${_IPADDRESS}/24" \
+    ipv4.gateway "${_ROUTERS}" \
+    ipv4.dns "${_NAMESERVERS}" \
+    ipv4.dns-search "${_DOMAIN}" \
+    ipv4.method "manual"
+  nmcli connection 
+  sudo cat /etc/NetworkManager/system-connections/*
 fi
 ```
+
+Howto set a static IP address, see [https://linux.fernandocejas.com/docs/how-to/set-static-ip-address](https://linux.fernandocejas.com/docs/how-to/set-static-ip-address) .  
+For further `nmcli` commands, see e.g. [https://opensource.com/article/20/7/nmcli](https://opensource.com/article/20/7/nmcli) ...
+```
+nmcli general
+nmcli connection show
+nmcli device status
+nmcli device show
+nmcli device show 
+```
+
+nmcli device show enxdca632250905
+
 
 
 
