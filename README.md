@@ -27,6 +27,7 @@ This will create the 11GB image file `2023-05-03-raspios-bullseye-armhf-full.img
 
 ## Setting environment variables
 Do a `sudo su -` to be `root`...  
+**Check carefully the destination (SD-card) `$SDCARDDEST`** e.g. by looking at the output of `dmesg`!!!
 ```
 #!/bin/bash
 
@@ -220,6 +221,8 @@ rmdir  "${ROOTFSDIR}" || echo "error rmdir ${ROOTFSDIR}"
 
 # Steps to do on your remote Raspberry Pi
 - Insert SD-card and boot.
+- Find the Raspberry Pi in the network:  
+  `nmap -sn 192.168.2.0/24` (maybe use it with `sudo`)
 - Access the Raspberry Pi remotely by using ssh:  
   `ssh fk@<remote-PC-ip-address>`  
   User name "fk" and password "12345678".
@@ -264,6 +267,7 @@ _LOCALELINE="de_DE.UTF-8 UTF-8"
             # de_DE ISO-8859-1
             # de_DE@euro ISO-8859-15
 _LOGPATH=/home/fk/logs/install-logs/
+export LOCALE="$(echo ${_LOCALELINE} | cut -f1 -d " ")"
 
 
 if is_pi ; then
@@ -283,6 +287,14 @@ _SW2INSTALL="pv xterm smartmontools geeqie xserver-xorg-input-evdev xinput-calib
 # First action(s)...
 # -------------------------------------------------------------------------------
 mkdir -p "${_LOGPATH}"
+
+
+# -------------------------------------------------------------------------------
+# Set LOCALE
+# -------------------------------------------------------------------------------
+if is_pi ; then
+  sudo raspi-config nonint do_change_locale "${LOCALE}"
+fi
 ```
 
 ## Update software, firmware and install first initial packages

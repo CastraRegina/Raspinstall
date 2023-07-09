@@ -29,6 +29,7 @@ _LOCALELINE="de_DE.UTF-8 UTF-8"
             # de_DE ISO-8859-1
             # de_DE@euro ISO-8859-15
 _LOGPATH=/home/fk/logs/install-logs/
+export LOCALE="$(echo ${_LOCALELINE} | cut -f1 -d " ")"
 
 
 if is_pi ; then
@@ -49,6 +50,13 @@ _SW2INSTALL="pv xterm smartmontools geeqie xserver-xorg-input-evdev xinput-calib
 # -------------------------------------------------------------------------------
 mkdir -p "${_LOGPATH}"
 
+
+# -------------------------------------------------------------------------------
+# Set LOCALE
+# -------------------------------------------------------------------------------
+if is_pi ; then
+  sudo raspi-config nonint do_change_locale "${LOCALE}"
+fi
 
 
 #################################################################################
