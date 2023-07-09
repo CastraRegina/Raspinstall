@@ -152,15 +152,15 @@ fi
 #     cat /usr/share/i18n/SUPPORTED | grep ^de_DE
 if is_pi ; then
   sudo raspi-config nonint do_change_locale "${_LOCALELINE}"
-  LOCALE="$(echo ${_LOCALELINE} | cut -f1 -d " ")"
-  ENCODING="$(echo ${_LOCALELINE} | cut -f2 -d " ")"
-  echo "$LOCALE $ENCODING"  | sudo tee    /etc/locale.gen
-  echo "LANG=${LOCALE}"     | sudo tee    /etc/default/locale
-  echo "LC_ALL=${LOCALE}"   | sudo tee -a /etc/default/locale
-  echo "LANGUAGE=${LOCALE}" | sudo tee -a /etc/default/locale
-  sudo locale-gen ${LOCALE}
-  sudo update-locale ${LOCALE}
-  sudo dpkg-reconfigure -f noninteractive locales
+  ### LOCALE="$(echo ${_LOCALELINE} | cut -f1 -d " ")"
+  ### ENCODING="$(echo ${_LOCALELINE} | cut -f2 -d " ")"
+  ### echo "$LOCALE $ENCODING"  | sudo tee    /etc/locale.gen
+  ### echo "LANG=${LOCALE}"     | sudo tee    /etc/default/locale
+  ### echo "LC_ALL=${LOCALE}"   | sudo tee -a /etc/default/locale
+  ### echo "LANGUAGE=${LOCALE}" | sudo tee -a /etc/default/locale
+  ### sudo locale-gen ${LOCALE}
+  ### sudo update-locale ${LOCALE}
+  ### sudo dpkg-reconfigure -f noninteractive locales
 fi
 
 
@@ -321,10 +321,10 @@ fi
 # -------------------------------------------------------------------------------
 if is_pi ; then
   sudo raspi-config nonint do_netconf 2
-  sudo systemctl stop dhcpcd.service
-  sudo systemctl disable dhcpcd.service
-  sudo systemctl enable networking
-  sudo systemctl restart networking
+  #sudo systemctl stop dhcpcd.service
+  #sudo systemctl disable dhcpcd.service
+  #sudo systemctl enable networking
+  #sudo systemctl restart networking
   sudo systemctl status networking
 fi
 

@@ -380,15 +380,15 @@ fi
 #     cat /usr/share/i18n/SUPPORTED | grep ^de_DE
 if is_pi ; then
   sudo raspi-config nonint do_change_locale "${_LOCALELINE}"
-  LOCALE="$(echo ${_LOCALELINE} | cut -f1 -d " ")"
-  ENCODING="$(echo ${_LOCALELINE} | cut -f2 -d " ")"
-  echo "$LOCALE $ENCODING"  | sudo tee    /etc/locale.gen
-  echo "LANG=${LOCALE}"     | sudo tee    /etc/default/locale
-  echo "LC_ALL=${LOCALE}"   | sudo tee -a /etc/default/locale
-  echo "LANGUAGE=${LOCALE}" | sudo tee -a /etc/default/locale
-  sudo locale-gen ${LOCALE}
-  sudo update-locale ${LOCALE}
-  sudo dpkg-reconfigure -f noninteractive locales
+  ### LOCALE="$(echo ${_LOCALELINE} | cut -f1 -d " ")"
+  ### ENCODING="$(echo ${_LOCALELINE} | cut -f2 -d " ")"
+  ### echo "$LOCALE $ENCODING"  | sudo tee    /etc/locale.gen
+  ### echo "LANG=${LOCALE}"     | sudo tee    /etc/default/locale
+  ### echo "LC_ALL=${LOCALE}"   | sudo tee -a /etc/default/locale
+  ### echo "LANGUAGE=${LOCALE}" | sudo tee -a /etc/default/locale
+  ### sudo locale-gen ${LOCALE}
+  ### sudo update-locale ${LOCALE}
+  ### sudo dpkg-reconfigure -f noninteractive locales
 fi
 
 
@@ -598,10 +598,8 @@ nmcli general
 nmcli connection show
 nmcli device status
 nmcli device show
-nmcli device show 
 ```
 
-nmcli device show enxdca632250905
 
 
 

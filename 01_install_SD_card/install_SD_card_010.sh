@@ -149,7 +149,7 @@ echo ${USERNAME}:${encpasswd} > ${USERCONFTXT}
 # -------------------------------------------------------------------------------
 # Disable vim automatic visual mode on mouse select
 # -------------------------------------------------------------------------------
-if ! grep -q "set mouse-=a" ${ROOTFSDIR}etc/skel/.vimrc ; then
+if [ ! -f "${ROOTFSDIR}etc/skel/.vimrc" ] || ! grep -q "set mouse-=a" ${ROOTFSDIR}etc/skel/.vimrc ; then
   echo 'set mouse-=a' >> ${ROOTFSDIR}etc/skel/.vimrc
 fi
 
