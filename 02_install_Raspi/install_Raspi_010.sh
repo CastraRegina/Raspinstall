@@ -328,6 +328,11 @@ fi
 # -------------------------------------------------------------------------------
 if is_pi ; then
   sudo raspi-config nonint do_netconf 2
+  sudo systemctl stop dhcpcd.service
+  sudo systemctl disable dhcpcd.service
+  sudo systemctl enable networking
+  sudo systemctl restart networking
+  sudo systemctl status networking
 fi
 
 
