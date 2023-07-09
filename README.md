@@ -28,6 +28,8 @@ This will create the 11GB image file `2023-05-03-raspios-bullseye-armhf-full.img
 ## Setting environment variables
 Do a `sudo su -` to be `root`...  
 ```
+#!/bin/bash
+
 set -e   # immediately exit if any command has a non-zero exit status
 set -u   # treat unset variables as an error and exit immediately
 
@@ -178,12 +180,18 @@ Setup a new user for the headless Raspberry Pi as explained in
 or [https://github.com/raspberrypi/documentation/blob/develop/documentation/asciidoc/computers/configuration/headless.adoc](https://github.com/raspberrypi/documentation/blob/develop/documentation/asciidoc/computers/configuration/headless.adoc) ...  
 Do not forget to set a better password later!!!
 ```
+# -------------------------------------------------------------------------------
+# create / set default password for user 
+# -------------------------------------------------------------------------------
 encpasswd=$(echo '12345678' | openssl passwd -6 -stdin)
 echo ${USERNAME}:${encpasswd} > ${USERCONFTXT}
 ```
 
 Disable vim automatic visual mode on mouse select
 ```
+# -------------------------------------------------------------------------------
+# Disable vim automatic visual mode on mouse select
+# -------------------------------------------------------------------------------
 if ! grep -q "set mouse-=a" ${ROOTFSDIR}etc/skel/.vimrc ; then
   echo 'set mouse-=a' >> ${ROOTFSDIR}etc/skel/.vimrc
 fi
@@ -196,11 +204,11 @@ fi
 # -------------------------------------------------------------------------------
 while mount | grep -q ${SDCARDDEST}  ; do
   echo "trying to umount ${BOOTFSDIR} and ${ROOTFSDIR}"
-  umount "${BOOTFSDIR}"   || echo "error unmount ${BOOTFSDIR}"
+  umount "${BOOTFSDIR}" || echo "error unmount ${BOOTFSDIR}"
   umount "${ROOTFSDIR}" || echo "error unmount ${ROOTFSDIR}"
   sleep 1s
 done
-rmdir  "${BOOTFSDIR}"   || echo "error rmdir ${BOOTFSDIR}"
+rmdir  "${BOOTFSDIR}" || echo "error rmdir ${BOOTFSDIR}"
 rmdir  "${ROOTFSDIR}" || echo "error rmdir ${ROOTFSDIR}"
 ```
 
@@ -225,6 +233,8 @@ passwd
 
 ## Intial settings: Define helper functions and environmental variables 
 ```
+#!/bin/bash
+
 set -e   # immediately exit if any command has a non-zero exit status
 set -u   # treat unset variables as an error and exit immediately
 
