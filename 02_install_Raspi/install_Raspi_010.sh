@@ -1,3 +1,5 @@
+#!/bin/bash
+
 set -e   # immediately exit if any command has a non-zero exit status
 set -u   # treat unset variables as an error and exit immediately
 
