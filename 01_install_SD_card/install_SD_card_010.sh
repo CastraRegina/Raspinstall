@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#!/bin/bash
-
 set -e   # immediately exit if any command has a non-zero exit status
 set -u   # treat unset variables as an error and exit immediately
 
@@ -26,6 +24,7 @@ CONFIGTXT=${BOOTFSDIR}config.txt
 USERCONFTXT=${BOOTFSDIR}userconf.txt
 USERNAME=fk
 RASPIIMAGE=/mnt/lanas01_test/iso_images/raspios/2023-05-03-raspios-bullseye-armhf-full.img
+RASPIIMAGE=/data/nobackup/fk/Raspberrypi/2023-05-03-raspios-bullseye-armhf-full.img
 SDCARDDEST=/dev/sdc    # check carefully !!!
 
 
@@ -132,7 +131,7 @@ if ! grep -q "hdmi configuration for 10inch touchscreen" ${CONFIGTXT} ; then
   echo "hdmi_group=2"                                 >> ${CONFIGTXT}
   echo "hdmi_mode=27"                                 >> ${CONFIGTXT}
   echo ""                                             >> ${CONFIGTXT}
-  sed -i 's/^dtoverlay=vc4-kms-v3d*$/#dtoverlay=vc4-kms-v3d/g' ${CONFIGTXT}
+  sed -i 's/^dtoverlay=vc4-kms-v3d/#dtoverlay=vc4-kms-v3d/g' ${CONFIGTXT}
 fi
 echo
 
@@ -152,6 +151,13 @@ echo ${USERNAME}:${encpasswd} > ${USERCONFTXT}
 if [ ! -f "${ROOTFSDIR}etc/skel/.vimrc" ] || ! grep -q "set mouse-=a" ${ROOTFSDIR}etc/skel/.vimrc ; then
   echo 'set mouse-=a' >> ${ROOTFSDIR}etc/skel/.vimrc
 fi
+
+
+
+# -------------------------------------------------------------------------------
+# Fix LOCALE-error-message when installing packages
+# -------------------------------------------------------------------------------
+# sed -i 's/^AcceptEnv LANG LC_\*/#AcceptEnv LANG LC_\*/g' ${ROOTFSDIR}etc/ssh/sshd_config
 
 
 
