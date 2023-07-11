@@ -138,9 +138,9 @@ fi
 # -------------------------------------------------------------------------------
 # Set hostname
 # -------------------------------------------------------------------------------
-sudo sed -i /etc/hostname -e "s/raspberrypi/${_HOSTNAME}/"
-sudo sed -i /etc/hosts    -e "s/raspberrypi/${_HOSTNAME}/"
 if is_pi ; then
+  sudo sed -i /etc/hostname -e "s/raspberrypi/${_HOSTNAME}/"
+  sudo sed -i /etc/hosts    -e "s/raspberrypi/${_HOSTNAME}/"
   sudo raspi-config nonint do_hostname ${_HOSTNAME}
 fi
 
