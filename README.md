@@ -171,7 +171,7 @@ if ! grep -q "hdmi configuration for 10inch touchscreen" ${CONFIGTXT} ; then
   echo "hdmi_group=2"                                 >> ${CONFIGTXT}
   echo "hdmi_mode=27"                                 >> ${CONFIGTXT}
   echo ""                                             >> ${CONFIGTXT}
-  sed -i 's/^dtoverlay=vc4-kms-v3d*$/#dtoverlay=vc4-kms-v3d/g' ${CONFIGTXT}
+  sed -i 's/^dtoverlay=vc4-kms-v3d/#dtoverlay=vc4-kms-v3d/g' ${CONFIGTXT}
 fi
 echo
 ```
@@ -196,6 +196,18 @@ Disable vim automatic visual mode on mouse select
 if ! grep -q "set mouse-=a" ${ROOTFSDIR}etc/skel/.vimrc ; then
   echo 'set mouse-=a' >> ${ROOTFSDIR}etc/skel/.vimrc
 fi
+```
+
+Fix LOCALE-error-message when installing packages, see  
+[https://stackoverflow.com/questions/2499794/how-to-fix-a-locale-setting-warning-from-perl](https://stackoverflow.com/questions/2499794/how-to-fix-a-locale-setting-warning-from-perl)
+```
+# -------------------------------------------------------------------------------
+# Fix LOCALE-error-message when installing packages
+# -------------------------------------------------------------------------------
+sed -i 's/^AcceptEnv LANG LC_\*/#AcceptEnv LANG LC_\*/g' ${ROOTFSDIR}etc/ssh/sshd_config
+
+
+
 ```
 
 ### Umount SD-card
@@ -551,10 +563,10 @@ fi
 # -------------------------------------------------------------------------------
 if is_pi ; then
   sudo raspi-config nonint do_netconf 2
-  sudo systemctl stop dhcpcd.service
-  sudo systemctl disable dhcpcd.service
-  sudo systemctl enable networking
-  sudo systemctl restart networking
+  #sudo systemctl stop dhcpcd.service
+  #sudo systemctl disable dhcpcd.service
+  #sudo systemctl enable networking
+  #sudo systemctl restart networking
   sudo systemctl status networking
 fi
 
