@@ -401,6 +401,7 @@ if is_pi ; then
   ### sudo locale-gen ${LOCALE}
   ### sudo update-locale ${LOCALE}
   ### sudo dpkg-reconfigure -f noninteractive locales
+  ### ### only important one: $LANG=de_DE.UTF-8
 fi
 
 
@@ -832,7 +833,7 @@ or [https://medium.com/@anirudhgupta281998/setup-a-print-server-using-raspberry-
 or [https://opensource.com/article/18/3/print-server-raspberry-pi](https://opensource.com/article/18/3/print-server-raspberry-pi)
 - Make sure cups is installed
   ```
-  sudo apt install cups
+  sudo apt -y install cups
   ```
 - Check if the standard user is already member of group `lpadmin` by: `id $USER`.  
   If not, do a
