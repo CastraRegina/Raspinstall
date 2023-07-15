@@ -118,3 +118,30 @@ if is_pi ; then
   sudo raspi-config nonint do_vnc_resolution "1600x1000"
 fi
 
+
+# -------------------------------------------------------------------------------
+# Modify /etc/fstab to reduce SD-card access (reduce wear)
+# -------------------------------------------------------------------------------
+if is_pi ; then
+  if ! grep -q "/var/tmp" /etc/fstab ; then
+    echo "# ---- special settings -------------------------------------------------------------------" | sudo tee -a /etc/fstab
+    echo "#/run, /var/run, /run/lock, /var/run/lock will be automatically created by default - tmpfs"  | sudo tee -a /etc/fstab
+    echo "tmpfs /tmp              tmpfs defaults,noatime,nosuid,size=100m                         0 0" | sudo tee -a /etc/fstab
+    echo "tmpfs /var/tmp          tmpfs defaults,noatime,nosuid,size=30m                          0 0" | sudo tee -a /etc/fstab
+    echo "#tmpfs /var/log          tmpfs defaults,noatime,mode=0755,size=30m                       0 0" | sudo tee -a /etc/fstab
+    echo "tmpfs /var/spool/mqueue tmpfs defaults,noatime,nosuid,mode=0700,gid=12,size=30m         0 0" | sudo tee -a /etc/fstab
+    echo "tmpfs /var/cache/samba  tmpfs nodev,nosuid,noatime,size=50m                             0 0" | sudo tee -a /etc/fstab
+    echo "#tmpfs /var/www/html     tmpfs defaults,noatime,nosuid,nodev,noexec,mode=0755,size=50m   0 0" | sudo tee -a /etc/fstab
+    echo "tmpfs /var/lib/upsd     tmpfs defaults,noatime,nosuid,nodev,noexec,mode=0755,size=4k    0 0" | sudo tee -a /etc/fstab
+  fi
+fi
+
+
+# -------------------------------------------------------------------------------
+# Switch of swap-file/swap-partition to reduce SD-card access (reduce wear)
+# -------------------------------------------------------------------------------
+if is_pi ; then
+  sudo dphys-swapfile swapoff
+  sudo systemctl disable dphys-swapfile
+fi
+
