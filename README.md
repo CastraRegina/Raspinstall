@@ -6,7 +6,7 @@ Scripts should be [idempotent](https://en.wikipedia.org/wiki/Idempotence):
 # Content
 - [Steps to do on your local Linux-PC](#steps-to-do-on-your-local-linux-pc)
 - [Steps to do on your remote Raspberry Pi](#steps-to-do-on-your-remote-raspberry-pi)
-- [Optional Setups](#optional-setups)
+- [Manual Setups](#manual-setups)
 - [Further interesting topics](#further-interesting-topics)
 
 
@@ -263,6 +263,19 @@ Runs for approximately 7 minutes.
 
 ## Run 030_first_settings.sh
 
+### Reduce number of writes to SD-card
+- Create certain folders as RAM-disk (=tmpfs).  
+  See [https://www.dzombak.com/blog/2021/11/Reducing-SD-Card-Wear-on-a-Raspberry-Pi-or-Armbian-Device.html](https://www.dzombak.com/blog/2021/11/Reducing-SD-Card-Wear-on-a-Raspberry-Pi-or-Armbian-Device.html)  
+  or [https://domoticproject.com/extending-life-raspberry-pi-sd-card/](https://domoticproject.com/extending-life-raspberry-pi-sd-card/)
+- Disable swap-file  
+  Check swap status:
+  ```
+  free -m
+  cat /proc/swaps
+  swapon -s
+  ```
+
+
 
 ## Run 040R_set_predictable_network_names.sh
 Background information regarding predictable network interface names:
@@ -318,26 +331,6 @@ Runs for approximately 33 minutes.
 # TODO : GO ON HERE ...
 ## Set secondary network IP address and/or further interface 
 
-## Reduce number of writes to SD-card
-### Create certain folders as RAM-disk (=tmpfs)
-TODO: check
-```
-if ! grep -q "/var/tmp" /etc/fstab ; then
-  echo "# ---- special settings ----------------------------------------------------------------- " | sudo tee -a /etc/fstab
-  echo "#/run, /var/run, /run/lock, /var/run/lock will be automatically created by default - tmpfs" | sudo tee -a /etc/fstab
-  echo "tmpfs /tmp              tmpfs defaults,noatime,nosuid,size=100m                 0 0"        | sudo tee -a /etc/fstab
-  echo "tmpfs /var/tmp          tmpfs defaults,noatime,nosuid,size=30m                  0 0"        | sudo tee -a /etc/fstab
-  echo "#tmpfs /var/log          tmpfs defaults,noatime,mode=0755,size=30m               0 0"        | sudo tee -a /etc/fstab
-  echo "tmpfs /var/spool/mqueue tmpfs defaults,noatime,nosuid,mode=0700,gid=12,size=30m 0 0"        | sudo tee -a /etc/fstab
-  echo "tmpfs /var/cache/samba  tmpfs nodev,nosuid,noatime,size=50m                     0 0"        | sudo tee -a /etc/fstab
-fi
-```
-### Disable swap-file
-TODO: check
-```
-sudo dphys-swapfile swapoff
-sudo systemctl disable dphys-swapfile
-```
 
 ## Secure ssh
 TODO: check
@@ -514,19 +507,22 @@ sudo systemctl status watchdog
 
 ```
 
-## Stop / disable superfluous services
-TODO
+## Stop / disable superfluous services and jobs
 
 ### Services
-TODO
+What services are running?
+```
+sudo systemctl --type=service --state=running
+```
+TODO: stop/disable them
 
 ### Regular update jobs
-TODO
-
+TODO: check
 
 
 ---
-# Optional setups
+# Manual setups
+
 ## Network print server
 See also [https://www.tomshardware.com/how-to/raspberry-pi-print-server](https://www.tomshardware.com/how-to/raspberry-pi-print-server)  
 or [https://medium.com/@anirudhgupta281998/setup-a-print-server-using-raspberry-pi-cups-part-2-2d6d48ccdc32](https://medium.com/@anirudhgupta281998/setup-a-print-server-using-raspberry-pi-cups-part-2-2d6d48ccdc32)  
@@ -586,3 +582,7 @@ iperf -c 192.168.x.y   # at client
 See `sudo raspi-config` *-> Performance -> Overlay file system* and also...  
 - [https://github.com/ghollingworth/overlayfs](https://github.com/ghollingworth/overlayfs)
 - [https://yagrebu.net/unix/rpi-overlay.md](https://yagrebu.net/unix/rpi-overlay.md)
+
+
+## Minimal Image
+Check [DietPi](https://dietpi.com/) .
