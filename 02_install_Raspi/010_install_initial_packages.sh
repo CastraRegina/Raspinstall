@@ -18,6 +18,7 @@ set -u   # treat unset variables as an error and exit immediately
 # -------------------------------------------------------------------------------
 # Install first initial packages
 # -------------------------------------------------------------------------------
+sudo apt update
 sudo apt -y install vim screen xterm pv openssh-server aptitude parted gparted btrfs-progs git
 sudo apt -y install ntp net-tools cifs-utils nfs-common 
 sudo apt -y install open-iscsi sg3-utils cryptsetup-bin 
