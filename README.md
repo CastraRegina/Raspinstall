@@ -246,6 +246,71 @@ see
 passwd
 ```
 
+
+## Download scripts
+```
+git clone https://github.com/CastraRegina/Raspinstall.git
+```
+
+
+## Run 010_install_initial_packages.sh
+Runs for approximately 2 minutes.
+
+
+## Run 020_update_packages.sh
+Runs for approximately 7 minutes.
+
+
+## Run 030_first_settings.sh
+
+
+## Run 040R_set_predictable_network_names.sh
+Background information regarding predictable network interface names:
+- [https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/](https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/)
+- [https://www.freedesktop.org/software/systemd/man/systemd.net-naming-scheme.html](https://www.freedesktop.org/software/systemd/man/systemd.net-naming-scheme.html)
+
+The predictable name for eth0 can be found with:  
+`udevadm test-builtin net_id /sys/class/net/eth0 | grep '^ID_NET_NAME_'`
+
+With current `raspi-config` (2023-07-08) the predictable network names will not be enabled.  
+Therefore a workaround is mentioned in the
+[Raspberry Pi Forum](https://forums.raspberrypi.com/viewtopic.php?t=258195).  
+See also [https://wiki.debian.org/NetworkInterfaceNames#THE_.22PERSISTENT_NAMES.22_SCHEME](https://wiki.debian.org/NetworkInterfaceNames#THE_.22PERSISTENT_NAMES.22_SCHEME).
+
+
+**Do a reboot afterwards.**
+
+
+## Run 050R_switch_to_network_manager.sh
+Check:
+```
+ifconfig -a
+sudo systemctl status networking
+nmcli connection 
+```
+
+**Do a reboot afterwards.**
+
+
+## Run 060R_set_static_IP_address.sh
+How to setup a static IP address, see [https://linux.fernandocejas.com/docs/how-to/set-static-ip-address](https://linux.fernandocejas.com/docs/how-to/set-static-ip-address) .  
+For further `nmcli` commands, see e.g. [https://opensource.com/article/20/7/nmcli](https://opensource.com/article/20/7/nmcli) ...
+```
+nmcli general
+nmcli connection show
+nmcli device status
+nmcli device show
+```
+
+**Do a reboot afterwards.**
+
+
+## Run 080_install_further_packages.sh
+Runs for approximately 33 minutes.
+
+
+
+
 ## Intial settings: Define helper functions and environmental variables 
 ```
 #!/bin/bash
@@ -822,10 +887,14 @@ sudo systemctl status watchdog
 TODO
 
 ### Services
+TODO
 
 ### Regular update jobs
+TODO
 
 
+
+---
 # Optional setups
 ## Network print server
 See also [https://www.tomshardware.com/how-to/raspberry-pi-print-server](https://www.tomshardware.com/how-to/raspberry-pi-print-server)  
@@ -886,5 +955,3 @@ iperf -c 192.168.x.y   # at client
 See `sudo raspi-config` *-> Performance -> Overlay file system* and also...  
 - [https://github.com/ghollingworth/overlayfs](https://github.com/ghollingworth/overlayfs)
 - [https://yagrebu.net/unix/rpi-overlay.md](https://yagrebu.net/unix/rpi-overlay.md)
-
-## Network print server 
