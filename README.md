@@ -572,6 +572,10 @@ or [https://opensource.com/article/18/3/print-server-raspberry-pi](https://opens
 # Further interesting topics
 
 
+## Snap - how to install and use
+pros & cons?
+
+
 ## Retrieve informations
 ```
 # Linux kernel version
@@ -583,6 +587,21 @@ cat /etc/os-release
 # Rasperry Pi model
 cat /sys/firmware/devicetree/base/model 
 ```
+
+
+## Scan for open ports
+```
+nmap -p- 192.168.2.163
+nmap -sT -p 1-65535 192.168.2.163
+```
+
+
+## Scan network
+Maybe use it with `sudo`
+```
+nmap -sn 192.168.2.0/24 
+```
+
 
 ## Check network performance
 ```
