@@ -132,7 +132,7 @@ if is_pi ; then
     echo "tmpfs /var/spool/mqueue tmpfs defaults,noatime,nosuid,mode=0700,gid=12,size=30m         0 0" | sudo tee -a /etc/fstab
     echo "tmpfs /var/cache/samba  tmpfs nodev,nosuid,noatime,size=50m                             0 0" | sudo tee -a /etc/fstab
     echo "#tmpfs /var/www/html     tmpfs defaults,noatime,nosuid,nodev,noexec,mode=0755,size=50m   0 0" | sudo tee -a /etc/fstab
-    echo "tmpfs /var/lib/upsd     tmpfs defaults,noatime,nosuid,nodev,noexec,mode=0755,size=4k    0 0" | sudo tee -a /etc/fstab
+    echo "#tmpfs /var/lib/upsd     tmpfs defaults,noatime,nosuid,nodev,noexec,mode=0755,size=4k    0 0" | sudo tee -a /etc/fstab
   fi
 fi
 
