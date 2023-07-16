@@ -319,8 +319,8 @@ nmcli device show
 
 
 ## Run 080_install_further_packages.sh
-Runs for approximately 33 minutes.
-
+Runs for approximately 33 minutes.  
+Check if LOCALE error occurrs.
 
 
 
@@ -331,23 +331,6 @@ Runs for approximately 33 minutes.
 # TODO : GO ON HERE ...
 ## Set secondary network IP address and/or further interface 
 
-
-## Secure ssh
-TODO: check
-```
-# sudo vi /etc/ssh/sshd_config     # --> PermitRootLogin no
-# sudo vi /etc/fail2ban/jail.conf  # --> bantime=10m   maxretry=5  (default)
-#   [sshd]
-#   enabled = true
-#   port = ssh
-#   filter = sshd
-#   logpath = /var/log/auth.log
-#   maxretry = 3
-#   bantime = 10m
-```
-
-## No cleanup of /dev/shm at ssh-logout
-TODO: Check if this is still the case!!!
 
 ## VNC setup
 Check the setup if it works and if also the window-manager does work...
@@ -523,6 +506,33 @@ TODO: check
 ---
 # Manual setups
 
+## Secure ssh using fail2ban
+UPDATE: Looks like the current default with `2023-05-03-raspios-bullseye-armhf-full.img` is already configured with reasonable settings (bantime=10m, maxretry=5).
+```
+# sudo vi /etc/ssh/sshd_config     # --> PermitRootLogin no
+# sudo vi /etc/fail2ban/jail.conf  # --> bantime=10m   maxretry=5  (default)
+#   [sshd]
+#   enabled = true
+#   port = ssh
+#   filter = sshd
+#   logpath = /var/log/auth.log
+#   maxretry = 5
+#   bantime = 10m
+```
+
+
+
+## No cleanup of /dev/shm at ssh-logout
+UPDATE: Looks like the current default with `2023-05-03-raspios-bullseye-armhf-full.img` is set to not clean `/dev/shm` at logout of a user (like intended).  
+See [https://superuser.com/questions/1117764/why-are-the-contents-of-dev-shm-is-being-removed-automatically](https://superuser.com/questions/1117764/why-are-the-contents-of-dev-shm-is-being-removed-automatically) .  
+Check setting of `RemoveIPC` in `/etc/systemd/logind.conf`.  
+It must be uncommented and set to `no`:
+```
+RemoveIPC=no
+``` 
+
+
+
 ## Network print server
 See also [https://www.tomshardware.com/how-to/raspberry-pi-print-server](https://www.tomshardware.com/how-to/raspberry-pi-print-server)  
 or [https://medium.com/@anirudhgupta281998/setup-a-print-server-using-raspberry-pi-cups-part-2-2d6d48ccdc32](https://medium.com/@anirudhgupta281998/setup-a-print-server-using-raspberry-pi-cups-part-2-2d6d48ccdc32)  
@@ -557,6 +567,8 @@ or [https://opensource.com/article/18/3/print-server-raspberry-pi](https://opens
 
 
 
+
+---
 # Further interesting topics
 
 
