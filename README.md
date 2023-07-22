@@ -332,14 +332,6 @@ Check if LOCALE error occurrs.
 ## Set secondary network IP address and/or further interface 
 
 
-## VNC setup
-Check the setup if it works and if also the window-manager does work...
-```
-sudo systemctl start vncserver-x11-serviced.service
-vncserver -geometry 1800x1000
-sudo systemctl stop vncserver-x11-serviced.service
-```
-
 ## Automatic nightly reboot at 2:30
 ```
 sudo crontab -e
@@ -571,10 +563,80 @@ or [https://opensource.com/article/18/3/print-server-raspberry-pi](https://opens
 ---
 # Further interesting topics
 
+## VNC - start and stop
+- Start the `vncserver` (start of service is needed so that the window-manager works):
+  ```
+  sudo systemctl start vncserver-x11-serviced.service
+  vncserver-virtual -geometry 1800x1000
+  sudo systemctl stop vncserver-x11-serviced.service
+  ```
+- Stop / kill `vncserver`
+  ```
+  vncserver-virtual -kill :1
+  ```
+- Which vncservers are currently running (which vncserver sessions):
+  ```
+  cat ~/.vnc/*.pid
+  ```
+- Check which `vncserver` is installed:
+  ```
+  dpkg -l | grep vnc
+  ```
+- Info: `raspi-config` creates a symlink to start the `vncserver`:  
+  `/etc/systemd/system/multi-user.target.wants/vncserver-x11-serviced.service --> /lib/systemd/system/vncserver-x11-serviced.service` .
+
+
 
 ## Snap - how to install and use
-pros & cons?
+- Installation of core system:  
+  [https://snapcraft.io/docs/installing-snap-on-raspbian](https://snapcraft.io/docs/installing-snap-on-raspbian)
+  ```
+  sudo apt -y install snapd    
+  # do a reboot afterwards: 
+  # sudo reboot
+  sudo snap install core
+  ### sudo snap install snap-store 
+  ```
 
+- Installation of a snap-package(s):
+  ```
+  sudo snap install hello-world
+  sudo snap install firefox
+  sudo snap install chromium
+  ```
+  Execute `hello-world` to check the installation and execution.
+  In case an error occurs, check [https://stackoverflow.com/questions/42443273/raspberry-pi-libarmmem-so-cannot-open-shared-object-file-error/50958615#50958615](https://stackoverflow.com/questions/42443273/raspberry-pi-libarmmem-so-cannot-open-shared-object-file-error/50958615#50958615) .  
+  ```
+  cat /proc/cpuinfo | grep 'model name'
+  ls -1 /usr/lib/arm-linux-gnueabihf/libarmmem*
+  sudo vi /etc/ld.so.preload
+  #   replace /usr/lib/arm-linux-gnueabihf/libarmmem-${PLATAFORM}.so  with correct library
+  # OR:
+  #   If this does not solve the error: Just comment out the first line of /etc/ld.so.preload
+  ```
+
+- Update of a snap-package (e.g. `core`):
+  ```
+  sudo snap refresh core
+  ```
+
+- Deinstall / remove a snap-package:
+  ```
+  sudo snap remove snap-store
+  ```
+
+- Installation of a snap-package provided as file:
+  ```
+  TODO 
+  ```
+- Start / execute are snap-package by calling its `/snap/bin/xyz`-link:
+  ```
+  ### sudo apt -y install dbus-user-session
+  ### systemctl --user start dbus.service
+  echo $DBUS_SESSION_BUS_ADDRESS
+  export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
+  /snap/bin/firefox
+  ```
 
 ## Retrieve informations
 ```
@@ -586,6 +648,20 @@ cat /etc/os-release
 
 # Rasperry Pi model
 cat /sys/firmware/devicetree/base/model 
+
+# Hostname and further info
+hostnamectl
+
+# print Linux distribution specific information
+lsb_release -a
+
+# 32-bit or 64-bit?
+getconf LONG_BIT
+
+# CPU and hardware details
+lscpu
+cat /proc/cpuinfo
+
 ```
 
 
@@ -617,3 +693,7 @@ See `sudo raspi-config` *-> Performance -> Overlay file system* and also...
 
 ## Minimal Image
 Check [DietPi](https://dietpi.com/) .
+
+
+## Raspi as reverse proxy
+Check 
