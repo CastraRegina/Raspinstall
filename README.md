@@ -545,7 +545,7 @@ or [https://opensource.com/article/18/3/print-server-raspberry-pi](https://opens
 - Connect with port `631` of the Raspi using a webbrowser.  
   Configure the printer:
   - `Administration` -> `Add Printer`
-  - Select local printer
+  - Select local printer (HP LaserJet 1100)
   - Share this printer (checkbox)
   - Select model (first entry: HP LaserJet 1100, hpcups 3.21.2 (en))
   - Set default options (Check `Media Size: A4` and `Print Quality: Best`)
