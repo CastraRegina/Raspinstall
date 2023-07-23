@@ -25,7 +25,7 @@ For example `2023-05-03-raspios-bullseye-armhf-full.img.xz`:
 ## Extract image
 Extract the image file at its place:  
 `xz -v -d 2023-05-03-raspios-bullseye-armhf-full.img.xz`  
-This will create the 11GB image file `2023-05-03-raspios-bullseye-armhf-full.img`.
+This will extract the 11GB image file `2023-05-03-raspios-bullseye-armhf-full.img`.
 
 ## Setting environment variables
 Do a `sudo su -` to be `root`...  
@@ -262,33 +262,32 @@ Runs for approximately 7 minutes.
 
 
 ## Run 030_first_settings.sh
-
-### Reduce number of writes to SD-card
-- Create certain folders as RAM-disk (=tmpfs).  
-  See [https://www.dzombak.com/blog/2021/11/Reducing-SD-Card-Wear-on-a-Raspberry-Pi-or-Armbian-Device.html](https://www.dzombak.com/blog/2021/11/Reducing-SD-Card-Wear-on-a-Raspberry-Pi-or-Armbian-Device.html)  
-  or [https://domoticproject.com/extending-life-raspberry-pi-sd-card/](https://domoticproject.com/extending-life-raspberry-pi-sd-card/)
-- Disable swap-file  
-  Check swap status:
-  ```
-  free -m
-  cat /proc/swaps
-  swapon -s
-  ```
+- Background information how to reduce number of writes to SD-card:
+  - Create certain folders as RAM-disk (=tmpfs).  
+    See [https://www.dzombak.com/blog/2021/11/Reducing-SD-Card-Wear-on-a-Raspberry-Pi-or-Armbian-Device.html](https://www.dzombak.com/blog/2021/11/Reducing-SD-Card-Wear-on-a-Raspberry-Pi-or-Armbian-Device.html)  
+    or [https://domoticproject.com/extending-life-raspberry-pi-sd-card/](https://domoticproject.com/extending-life-raspberry-pi-sd-card/)
+  - Disable swap-file  
+    Check swap status:
+    ```
+    free -m
+    cat /proc/swaps
+    swapon -s
+    ```
 
 
 
 ## Run 040R_set_predictable_network_names.sh
-Background information regarding predictable network interface names:
-- [https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/](https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/)
-- [https://www.freedesktop.org/software/systemd/man/systemd.net-naming-scheme.html](https://www.freedesktop.org/software/systemd/man/systemd.net-naming-scheme.html)
+- Background information regarding predictable network interface names:
+  - [https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/](https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/)
+  - [https://www.freedesktop.org/software/systemd/man/systemd.net-naming-scheme.html](https://www.freedesktop.org/software/systemd/man/systemd.net-naming-scheme.html)  
 
-The predictable name for eth0 can be found with:  
-`udevadm test-builtin net_id /sys/class/net/eth0 | grep '^ID_NET_NAME_'`
+  The predictable name for eth0 can be found with:  
+  `udevadm test-builtin net_id /sys/class/net/eth0 | grep '^ID_NET_NAME_'`
 
-With current `raspi-config` (2023-07-08) the predictable network names will not be enabled.  
-Therefore a workaround is mentioned in the
-[Raspberry Pi Forum](https://forums.raspberrypi.com/viewtopic.php?t=258195).  
-See also [https://wiki.debian.org/NetworkInterfaceNames#THE_.22PERSISTENT_NAMES.22_SCHEME](https://wiki.debian.org/NetworkInterfaceNames#THE_.22PERSISTENT_NAMES.22_SCHEME).
+  With current `raspi-config` (2023-07-08) the predictable network names will not be enabled.  
+  Therefore a workaround is mentioned in the
+  [Raspberry Pi Forum](https://forums.raspberrypi.com/viewtopic.php?t=258195).  
+  See also [https://wiki.debian.org/NetworkInterfaceNames#THE_.22PERSISTENT_NAMES.22_SCHEME](https://wiki.debian.org/NetworkInterfaceNames#THE_.22PERSISTENT_NAMES.22_SCHEME).
 
 
 **Do a reboot afterwards.**
@@ -664,6 +663,14 @@ cat /proc/cpuinfo
 
 ```
 
+
+## SD-card speed test
+```
+# write speed:
+dd if=/dev/zero of=./testFile bs=20M count=5 oflag=direct
+# read speed:
+dd if=./testFile of=/dev/null bs=20M count=5 oflag=dsync
+```
 
 ## Scan for open ports
 ```
