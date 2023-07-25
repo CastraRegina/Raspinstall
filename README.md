@@ -7,7 +7,7 @@ Scripts should be [idempotent](https://en.wikipedia.org/wiki/Idempotence):
 - [Steps to do on your local Linux-PC](#steps-to-do-on-your-local-linux-pc)
 - [Steps to do on your remote Raspberry Pi](#steps-to-do-on-your-remote-raspberry-pi)
 - [Manual Setups](#manual-setups)
-- [Further interesting topics](#further-interesting-topics)
+- [Miscellaneous](#miscellaneous)
 
 
 # Steps to do on your local Linux-PC
@@ -328,14 +328,10 @@ Check if LOCALE error occurrs.
 
 
 # TODO : GO ON HERE ...
-## Set secondary network IP address and/or further interface 
 
 
-## Automatic nightly reboot at 2:30
-```
-sudo crontab -e
-   #   30 2 * * * /sbin/shutdown -r now
-```
+
+
 
 ## Setup of ntp time server
 TODO: Check settings for what they are good for???
@@ -497,7 +493,16 @@ TODO: check
 ---
 # Manual setups
 
-## Secure ssh using fail2ban
+
+
+## Automatic nightly reboot at 2:30
+```
+sudo crontab -e
+   #   30 2 * * * /sbin/shutdown -r now
+```
+
+
+## (Secure ssh using fail2ban)
 UPDATE: Looks like the current default with `2023-05-03-raspios-bullseye-armhf-full.img` is already configured with reasonable settings (bantime=10m, maxretry=5).
 ```
 # sudo vi /etc/ssh/sshd_config     # --> PermitRootLogin no
@@ -513,7 +518,7 @@ UPDATE: Looks like the current default with `2023-05-03-raspios-bullseye-armhf-f
 
 
 
-## No cleanup of /dev/shm at ssh-logout
+## (No cleanup of /dev/shm at ssh-logout)
 UPDATE: Looks like the current default with `2023-05-03-raspios-bullseye-armhf-full.img` is set to not clean `/dev/shm` at logout of a user (like intended).  
 See [https://superuser.com/questions/1117764/why-are-the-contents-of-dev-shm-is-being-removed-automatically](https://superuser.com/questions/1117764/why-are-the-contents-of-dev-shm-is-being-removed-automatically) .  
 Check setting of `RemoveIPC` in `/etc/systemd/logind.conf`.  
@@ -523,8 +528,60 @@ RemoveIPC=no
 ``` 
 
 
+## (optional) Snap - how to install and use
+- Installation of core system:  
+  [https://snapcraft.io/docs/installing-snap-on-raspbian](https://snapcraft.io/docs/installing-snap-on-raspbian)
+  ```
+  sudo apt -y install snapd    
+  # do a reboot afterwards: 
+  # sudo reboot
+  sudo snap install core
+  ### sudo snap install snap-store 
+  ```
 
-## Network print server
+- Installation of a snap-package(s):
+  ```
+  sudo snap install hello-world
+  sudo snap install firefox
+  sudo snap install chromium
+  ```
+  Execute `hello-world` to check the installation and execution.  
+  In case an error occurs, check [https://stackoverflow.com/questions/42443273/raspberry-pi-libarmmem-so-cannot-open-shared-object-file-error/50958615#50958615](https://stackoverflow.com/questions/42443273/raspberry-pi-libarmmem-so-cannot-open-shared-object-file-error/50958615#50958615) .  
+  ```
+  cat /proc/cpuinfo | grep 'model name'
+  ls -1 /usr/lib/arm-linux-gnueabihf/libarmmem*
+  sudo vi /etc/ld.so.preload
+  #   replace /usr/lib/arm-linux-gnueabihf/libarmmem-${PLATAFORM}.so  with correct library
+  # OR:
+  #   If this does not solve the error: Just comment out the first line of /etc/ld.so.preload
+  ```
+
+- Update of a snap-package (e.g. `core`):
+  ```
+  sudo snap refresh core
+  ```
+
+- Deinstall / remove a snap-package:
+  ```
+  sudo snap remove snap-store
+  ```
+
+- Installation of a snap-package provided as file:
+  ```
+  sudo snap install ./a_snap_package.snap --dangerous
+  ```
+- Start / execute are snap-package by calling its `/snap/bin/xyz`-link:
+  ```
+  ### sudo apt -y install dbus-user-session
+  ### systemctl --user start dbus.service
+  echo $DBUS_SESSION_BUS_ADDRESS
+  export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
+  /snap/bin/firefox
+  ```
+
+
+
+## (optional) Network print server
 See also [https://www.tomshardware.com/how-to/raspberry-pi-print-server](https://www.tomshardware.com/how-to/raspberry-pi-print-server)  
 or [https://medium.com/@anirudhgupta281998/setup-a-print-server-using-raspberry-pi-cups-part-2-2d6d48ccdc32](https://medium.com/@anirudhgupta281998/setup-a-print-server-using-raspberry-pi-cups-part-2-2d6d48ccdc32)  
 or [https://opensource.com/article/18/3/print-server-raspberry-pi](https://opensource.com/article/18/3/print-server-raspberry-pi)
@@ -556,11 +613,15 @@ or [https://opensource.com/article/18/3/print-server-raspberry-pi](https://opens
 
 
 
+## (optional) Overlay Filesystem
+See `sudo raspi-config` *-> Performance -> Overlay file system* and also...  
+- [https://github.com/ghollingworth/overlayfs](https://github.com/ghollingworth/overlayfs)
+- [https://yagrebu.net/unix/rpi-overlay.md](https://yagrebu.net/unix/rpi-overlay.md)
 
 
 
 ---
-# Further interesting topics
+# Miscellaneous
 
 ## VNC - start and stop
 - Start the `vncserver` (start of service is needed so that the window-manager works):
@@ -585,57 +646,6 @@ or [https://opensource.com/article/18/3/print-server-raspberry-pi](https://opens
   `/etc/systemd/system/multi-user.target.wants/vncserver-x11-serviced.service --> /lib/systemd/system/vncserver-x11-serviced.service` .
 
 
-
-## Snap - how to install and use
-- Installation of core system:  
-  [https://snapcraft.io/docs/installing-snap-on-raspbian](https://snapcraft.io/docs/installing-snap-on-raspbian)
-  ```
-  sudo apt -y install snapd    
-  # do a reboot afterwards: 
-  # sudo reboot
-  sudo snap install core
-  ### sudo snap install snap-store 
-  ```
-
-- Installation of a snap-package(s):
-  ```
-  sudo snap install hello-world
-  sudo snap install firefox
-  sudo snap install chromium
-  ```
-  Execute `hello-world` to check the installation and execution.
-  In case an error occurs, check [https://stackoverflow.com/questions/42443273/raspberry-pi-libarmmem-so-cannot-open-shared-object-file-error/50958615#50958615](https://stackoverflow.com/questions/42443273/raspberry-pi-libarmmem-so-cannot-open-shared-object-file-error/50958615#50958615) .  
-  ```
-  cat /proc/cpuinfo | grep 'model name'
-  ls -1 /usr/lib/arm-linux-gnueabihf/libarmmem*
-  sudo vi /etc/ld.so.preload
-  #   replace /usr/lib/arm-linux-gnueabihf/libarmmem-${PLATAFORM}.so  with correct library
-  # OR:
-  #   If this does not solve the error: Just comment out the first line of /etc/ld.so.preload
-  ```
-
-- Update of a snap-package (e.g. `core`):
-  ```
-  sudo snap refresh core
-  ```
-
-- Deinstall / remove a snap-package:
-  ```
-  sudo snap remove snap-store
-  ```
-
-- Installation of a snap-package provided as file:
-  ```
-  TODO 
-  ```
-- Start / execute are snap-package by calling its `/snap/bin/xyz`-link:
-  ```
-  ### sudo apt -y install dbus-user-session
-  ### systemctl --user start dbus.service
-  echo $DBUS_SESSION_BUS_ADDRESS
-  export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
-  /snap/bin/firefox
-  ```
 
 ## Retrieve informations
 ```
@@ -682,7 +692,8 @@ nmap -sT -p 1-65535 192.168.2.163
 ## Scan network
 Maybe use it with `sudo`
 ```
-nmap -sn 192.168.2.0/24 
+nmap -sn 192.168.2.0/24
+nmap -sn 10.0.0.0/8
 ```
 
 
@@ -692,10 +703,28 @@ iperf -s               # at server
 iperf -c 192.168.x.y   # at client
 ```
 
-## Overlay Filesystem
-See `sudo raspi-config` *-> Performance -> Overlay file system* and also...  
-- [https://github.com/ghollingworth/overlayfs](https://github.com/ghollingworth/overlayfs)
-- [https://yagrebu.net/unix/rpi-overlay.md](https://yagrebu.net/unix/rpi-overlay.md)
+
+## Add a second IP address
+See [https://www.garron.me/en/linux/add-secondary-ip-linux.html](https://www.garron.me/en/linux/add-secondary-ip-linux.html)
+- Temporary
+  ```
+  # ifconfig -a    # old style
+  ip address
+  nmcli
+  nmcli connection show
+  nmcli connection show "Kabelgebundene Verbindung 1"
+  sudo ip address add 10.1.2.3/8 dev enxb827eba924ae
+  ```
+- Permanent
+  ```
+  sudo nmcli connection modify a8a99795-2dbf-3220-964d-9a4b4ff53ac0 +ipv4.addresses "10.1.2.3/8"
+  sudo cat /etc/NetworkManager/system-connections/*nmconnection
+  # do a reboot to establish the ip address
+  ```
+
+# Check out...
+## Set secondary network IP address and/or further interface 
+TODO
 
 
 ## Minimal Image
@@ -704,3 +733,4 @@ Check [DietPi](https://dietpi.com/) .
 
 ## Raspi as reverse proxy
 Check 
+
