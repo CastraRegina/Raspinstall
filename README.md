@@ -682,6 +682,7 @@ dd if=/dev/zero of=./testFile bs=20M count=5 oflag=direct
 dd if=./testFile of=/dev/null bs=20M count=5 oflag=dsync
 ```
 
+
 ## Scan for open ports
 ```
 nmap -p- 192.168.2.163
@@ -701,6 +702,13 @@ nmap -sn 10.0.0.0/8
 ```
 iperf -s               # at server
 iperf -c 192.168.x.y   # at client
+```
+
+
+## Clean apt cache
+```
+sudo du -sh /var/cache/apt/archives/
+sudo apt clean
 ```
 
 
