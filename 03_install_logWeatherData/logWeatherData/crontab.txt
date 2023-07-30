@@ -20,6 +20,6 @@
 # For more information see the manual pages of crontab(5) and cron(8)
 # 
 # m h  dom mon dow   command
-@reboot /usr/bin/screen -d -m /bin/bash /home/fk/bin_logWeatherData/logWeatherData.sh
-29 * * * * /home/fk/bin_logWeatherData/saveLogToday.sh
- 2 0 * * * /home/fk/bin_logWeatherData/saveLogYesterday.sh
+@reboot /usr/bin/screen -d -m /bin/bash /home/fk/bin/logWeatherData/logWeatherData.sh
+29 * * * * /home/fk/bin/logWeatherData/saveLogToday.sh
+ 2 0 * * * /home/fk/bin/logWeatherData/saveLogYesterday.sh
