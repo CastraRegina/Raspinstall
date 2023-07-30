@@ -732,9 +732,10 @@ See [https://www.garron.me/en/linux/add-secondary-ip-linux.html](https://www.gar
 
 
 ## Setup "Log Weather Data"
-- Execute script to
-  - Copy folder `bin_logWeatherData` to `$HOME/bin_logWeatherData`
+- Execute script [`install_logWeatherData.sh`](03_install_logWeatherData/install_logWeatherData.sh) to
+  - Copy folder `logWeatherData` to `$HOME/bin/logWeatherData`
   - Create virtual environment of python
+  - Install python module(s)
   - Set shell-scripts executable
 - Update root's `crontab`: Automatic nightly reboot at 2:30
   ```
@@ -743,9 +744,9 @@ See [https://www.garron.me/en/linux/add-secondary-ip-linux.html](https://www.gar
   ```
 - Update fk's `crontab`:
   ```
-  @reboot /usr/bin/screen -d -m /bin/bash /home/fk/bin_logWeatherData/logWeatherData.sh
-  29 * * * * /home/fk/bin_logWeatherData/saveLogToday.sh
-   2 0 * * * /home/fk/bin_logWeatherData/saveLogYesterday.sh
+  @reboot /usr/bin/screen -d -m /bin/bash /home/fk/bin/logWeatherData/logWeatherData.sh
+  29 * * * * /home/fk/bin/logWeatherData/saveLogToday.sh
+   2 0 * * * /home/fk/bin/logWeatherData/saveLogYesterday.sh
   ```
 
 
