@@ -9,6 +9,7 @@ import shutil
 #LOGDIRHDD = '/home/fk/logs'       # in this log-directory the directory YYYYMM will be created.
 #                                  # logFilename=<LOGDIRHDD>/YYYYMM/YYYYMMDD-weatherdata.txt   
 
+
 def yesterday():
     '''Returns a datetime object of yesterday'''
     return datetime.datetime.now() - datetime.timedelta(days=1)
@@ -23,7 +24,6 @@ def mkdirLogDir(logPathAndFilename):
     return os.path.exists(directory)
 
 
-#def getLogDirname(aLogDir, aDateTime = datetime.datetime.now()):
 def getLogDirname(aLogDir, aDateTime):
     '''Takes aLOGDIR and the (current) month+day and provides the current whole logDir-pathname.
     Example: $HOME/logs/201909
@@ -31,7 +31,6 @@ def getLogDirname(aLogDir, aDateTime):
     return os.path.join(aLogDir, aDateTime.strftime("%Y%m"))
 
 
-#def getLogFilename(aLogDir, logMainName, aDateTime = datetime.datetime.now()):
 def getLogFilename(aLogDir, logMainName, aDateTime):
     '''Takes aLogDir and provides the (current) whole logFilename.
     Example: $HOME/logs/201909/20190914-<logMainName>
@@ -50,6 +49,7 @@ def getCurrentDateTimeISO8601Str(utc = False):
     else:     
         dt = datetime.datetime.now().isoformat()
     return dt[:dt.rfind('.')]
+
 
 def getCurrentDateTimeYYYYmmddHHMMSSStr(utc = False):
     '''Returns a string of current date&time in YYYYmmdd-HHMMSS format (w/o miliseconds)
@@ -86,7 +86,6 @@ def unlockFile(fileHandle):
     fileHandle.close()
     
 
-#def copyLogFileFromSrcToDest(srcLogDir, destLogDir, logMainName, aDateTime = datetime.datetime.now(), bakLogDir = None):
 def copyLogFileFromSrcToDest(srcLogDir, destLogDir, logMainName, aDateTime, bakLogDir = None):
     '''E.g.: Copy log file e.g. from /dev/shm/logs to /home/fk/logs (day specified by aDateTime)'''
     srcFile  = getLogFilename( srcLogDir, logMainName, aDateTime)

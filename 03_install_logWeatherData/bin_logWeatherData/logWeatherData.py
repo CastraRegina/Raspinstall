@@ -49,6 +49,7 @@ def round_time(dt, date_delta=datetime.timedelta(minutes=1), to='average'):
     return dt + datetime.timedelta(0, rounding - seconds, -dt.microsecond)
 
 
+
 def sleepTillNextFullMinutes(minutes):
     '''Sleep till every full <minutes> is reached. Example: every 5 minutes'''
     now = datetime.datetime.now()
@@ -91,12 +92,7 @@ def isDataLineOK(dataLine):
 def readFromSerial(serialDev, threadLock): # function for thread
     while(True):
         # read line from WDE1
-        
-        #||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
         line = serialDev.readline().decode('UTF-8')
-        #line = input()
-        #||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-        
         line = line.strip()
         line = lld.getCurrentDateTimeISO8601Str() + " " + line 
         if isDataLineOK(line):
@@ -113,14 +109,10 @@ def logWeatherData(aLogDir, logMainName, serialPort, everyFullMinutes):
     Destination for saving: aLogDir, logMainName
     '''
     #  Open serial port:
-    #||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-    #serialDev = 0
-    #if (True) :
     with serial.Serial(serialPort, 9600) as serialDev:
         if not serialDev.isOpen():
             print("Unable to open serial port %s" % serialPort)
             sys.exit(1)
-    #||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
         # Start thread for reading from serial port:
         serialThread = threading.Thread(target=readFromSerial, args=(serialDev, threadLock, ), daemon=True)
         serialThread.start()
