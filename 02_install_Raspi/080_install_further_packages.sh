@@ -77,3 +77,13 @@ for i in ${SW2INSTALL} ; do
   fi
 done
 
+
+
+# -------------------------------------------------------------------------------
+# Clean the package cache...
+# -------------------------------------------------------------------------------
+sudo du -sh /var/cache/apt/archives/
+sudo apt clean
+sudo du -sh /var/cache/apt/archives/
+
+
