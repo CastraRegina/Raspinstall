@@ -417,7 +417,7 @@ sudo blkid /dev/sda1
 
 ```
 
-Check USBHDD using SMART
+Check USBHDD using SMART  
 TODO: check
 ```
 sudo smartctl -d sat --smart=on --offlineauto=on --saveauto=on /dev/sda
@@ -731,7 +731,7 @@ See [https://www.garron.me/en/linux/add-secondary-ip-linux.html](https://www.gar
   ```
 
 
-## Log Weather Data
+## Setup "Log Weather Data"
 - Execute script to
   - Copy folder `bin_logWeatherData` to `$HOME/bin_logWeatherData`
   - Create virtual environment of python
