@@ -730,6 +730,66 @@ See [https://www.garron.me/en/linux/add-secondary-ip-linux.html](https://www.gar
   # do a reboot to establish the ip address
   ```
 
+
+## Log Weather Data
+- Execute script to
+  - Copy folder `bin_logWeatherData` to `$HOME/bin_logWeatherData`
+  - Create virtual environment of python
+  - Set shell-scripts executable
+- Update root's `crontab`: Automatic nightly reboot at 2:30
+  ```
+  sudo crontab -e
+    #   30 2 * * * /sbin/shutdown -r now
+  ```
+- Update fk's `crontab`:
+  ```
+  @reboot /usr/bin/screen -d -m /bin/bash /home/fk/bin_logWeatherData/logWeatherData.sh
+  29 * * * * /home/fk/bin_logWeatherData/saveLogToday.sh
+   2 0 * * * /home/fk/bin_logWeatherData/saveLogYesterday.sh
+  ```
+
+
+## Setup ssh github access
+Using [github's guide to generating SSH keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)
+- Check for existing ssh-keys first, then create a new ssh-key
+  ```
+  ls -al ~/.ssh
+  ssh-keygen -t ed25519 -C "git@github.com"
+  ```
+- Login to [github.com](https://github.com)
+- Goto [profile-->settings](https://github.com/settings/profile)
+- Goto [SSH and GPG keys](https://github.com/settings/keys)
+- Add ssh-key to `SSH keys`
+  ```
+  cat ~/.ssh/id_ed25519.pub
+  ``` 
+- check ssh connection, see [testing-your-ssh-connection](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/testing-your-ssh-connection)
+  ```
+  ssh -T git@github.com
+  ```
+  ... should show something like:
+  ```
+  Hi <UserName>! You've successfully authenticated, but GitHub does not provide shell access.
+  ``` 
+- Clone this project
+  ```
+  git clone git@github.com:CastraRegina/Raspinstall.git
+  ```
+- Specify your git global data
+  ```
+  git config --global user.email "git@github.com"
+  git config --global user.name "fk"
+  ```
+- Enjoy the usual git workstyle
+  ```
+  git status
+  git pull
+  git add <file>
+  git commit -m "message"
+  git push
+  ```
+
+
 # Check out...
 ## Set secondary network IP address and/or further interface 
 TODO
