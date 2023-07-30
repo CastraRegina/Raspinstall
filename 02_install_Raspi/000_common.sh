@@ -35,7 +35,8 @@ export _NTPSERVER="192.168.2.1"
 export _LOCALELINE="de_DE.UTF-8 UTF-8"
             # de_DE ISO-8859-1
             # de_DE@euro ISO-8859-15
-export _LOGPATH=$HOME/logs/install-logs/
+export _LOGPATH=$HOME/logs/install/
+export _BINPATH=$HOME/bin
 export LOCALE="$(echo ${_LOCALELINE} | cut -f1 -d " ")"
 
 
@@ -54,9 +55,10 @@ export _SW2INSTALL="pv xterm nmap smartmontools geeqie xserver-xorg-input-evdev 
 
 
 # -------------------------------------------------------------------------------
-# Create path for log files, if path does not yet exist
+# Create log & bin path, if path does not yet exist
 # -------------------------------------------------------------------------------
 [ -d "${_LOGPATH}" ] || mkdir -p "${_LOGPATH}"
+[ -d "${_BINPATH}" ] || mkdir -p "${_BINPATH}"
 
 
 
