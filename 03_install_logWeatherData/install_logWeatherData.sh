@@ -11,16 +11,22 @@ cd "${HOME}/bin/logWeatherData"
 pwd
 
 echo "Creating python virtual environment..."
-# /usr/bin/python3 -m venv venv
+/usr/bin/python3 -m venv venv
 
 . venv/bin/activate
 
 which python3
 python3 --version
 
-echo "Updating pip, setuptools, wheels..."
-# python3 -m pip install --upgrade pip setuptools wheel
+if [[ $(which python3) == *"/venv/"* ]]; then
+  echo "Updating pip, setuptools, wheels..."
+  python3 -m pip install --upgrade pip setuptools wheel
 
-echo "Installing python modules..."
-# python3 -m pip install pyserial
+  echo "Installing python modules..."
+  python3 -m pip install pyserial
+else 
+  echo "ERROR: No venv - check the creation of the virtual python environment!"
+fi
+
+
 
