@@ -4,13 +4,13 @@ Scripts should be [idempotent](https://en.wikipedia.org/wiki/Idempotence):
     Regardless of how many times the script is again executed with the same input, the output must always remain the same.
 
 # Content
-- [Steps to do on your local Linux-PC](#steps-to-do-on-your-local-linux-pc)
-- [Steps to do on your remote Raspberry Pi](#steps-to-do-on-your-remote-raspberry-pi)
+- [Steps to do on the local Linux-PC](#steps-to-do-on-the-local-linux-pc)
+- [Steps to do on the remote Raspberry Pi](#steps-to-do-on-the-remote-raspberry-pi)
 - [Manual Setups](#manual-setups)
 - [Miscellaneous](#miscellaneous)
 
 
-# Steps to do on your local Linux-PC
+# Steps to do on the local Linux-PC
 ## Clone this repository
 ```
 git clone git@github.com:CastraRegina/Raspinstall.git
@@ -231,7 +231,7 @@ rmdir  "${ROOTFSDIR}" || echo "error rmdir ${ROOTFSDIR}"
 ---
 
 
-# Steps to do on your remote Raspberry Pi
+# Steps to do on the remote Raspberry Pi
 - Insert SD-card and boot.
 - Find the Raspberry Pi in the network:  
   `nmap -sn 192.168.2.0/24` (maybe use it with `sudo`)
@@ -251,17 +251,22 @@ passwd
 ```
 git clone https://github.com/CastraRegina/Raspinstall.git
 ```
+Remark:  
+All `sh`-scripts source [`000_common.sh`](02_install_Raspi/000_common.sh)
 
 
 ## Run 010_install_initial_packages.sh
+[`010_install_initial_packages.sh`](02_install_Raspi/010_install_initial_packages.sh)  
 Runs for approximately 2 minutes.
 
 
 ## Run 020_update_packages.sh
+[`020_update_packages.sh`](02_install_Raspi/020_update_packages.sh)  
 Runs for approximately 7 minutes.
 
 
 ## Run 030_first_settings.sh
+[`030_first_settings.sh`](02_install_Raspi/030_first_settings.sh)  
 - Background information how to reduce number of writes to SD-card:
   - Create certain folders as RAM-disk (=tmpfs).  
     See [https://www.dzombak.com/blog/2021/11/Reducing-SD-Card-Wear-on-a-Raspberry-Pi-or-Armbian-Device.html](https://www.dzombak.com/blog/2021/11/Reducing-SD-Card-Wear-on-a-Raspberry-Pi-or-Armbian-Device.html)  
@@ -277,6 +282,7 @@ Runs for approximately 7 minutes.
 
 
 ## Run 040R_set_predictable_network_names.sh
+[`040R_set_predictable_network_names.sh`](02_install_Raspi/040R_set_predictable_network_names.sh)  
 - Background information regarding predictable network interface names:
   - [https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/](https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/)
   - [https://www.freedesktop.org/software/systemd/man/systemd.net-naming-scheme.html](https://www.freedesktop.org/software/systemd/man/systemd.net-naming-scheme.html)  
@@ -294,7 +300,8 @@ Runs for approximately 7 minutes.
 
 
 ## Run 050R_switch_to_network_manager.sh
-Check:
+[`050R_switch_to_network_manager.sh`](02_install_Raspi/050R_switch_to_network_manager.sh)  
+Check after execution:
 ```
 ifconfig -a
 sudo systemctl status networking
@@ -305,6 +312,7 @@ nmcli connection
 
 
 ## Run 060R_set_static_IP_address.sh
+[`060R_set_static_IP_address.sh`](02_install_Raspi/060R_set_static_IP_address.sh)  
 How to setup a static IP address, see [https://linux.fernandocejas.com/docs/how-to/set-static-ip-address](https://linux.fernandocejas.com/docs/how-to/set-static-ip-address) .  
 For further `nmcli` commands, see e.g. [https://opensource.com/article/20/7/nmcli](https://opensource.com/article/20/7/nmcli) ...
 ```
@@ -318,14 +326,17 @@ nmcli device show
 
 
 ## Run 080_install_further_packages.sh
+[`080_install_further_packages.sh`](02_install_Raspi/080_install_further_packages.sh)  
 Runs for approximately 33 minutes.  
 Check if LOCALE error occurrs.
 
 
 ## Run 100_setup_ntp.sh
+[`100_setup_ntp.sh`](02_install_Raspi/100_setup_ntp.sh)  
+
 
 ## Run 110_setup_watchdog.sh
-TODO: see ...
+[`110_setup_watchdog.sh`](02_install_Raspi/110_setup_watchdog.sh)  
 
 
 
@@ -387,30 +398,6 @@ if ! grep -q "hdmi configuration for 10inch touchscreen" /boot/config.txt ; then
 fi
 ```
 
-## Setup watchdog
-TODO: check
-```
-if ! grep -q "bcm2835_wdt" /etc/modules ; then
-  sudo modprobe bcm2835_wdt
-  echo "bcm2835_wdt" | sudo tee -a /etc/modules
-
-  sudo sed -i /etc/watchdog.conf -e "s/^#max-load-1 /max-load-1 /"
-  sudo sed -i /etc/watchdog.conf -e "s/^#watchdog-device/watchdog-device/"
-  echo ""                             | sudo tee -a /etc/watchdog.conf
-  echo ""                             | sudo tee -a /etc/watchdog.conf
-  echo "watchdog-timeout        = 14" | sudo tee -a /etc/watchdog.conf
-  echo "retry-timeout           = 14" | sudo tee -a /etc/watchdog.conf
-  echo ""                             | sudo tee -a /etc/watchdog.conf
-
-  sudo sed -i /lib/systemd/system/watchdog.service -e "s/^WantedBy=/#WantedBy=/"
-  sudo sed -i /lib/systemd/system/watchdog.service -e '/^#WantedBy=/a\' -e 'WantedBy=multi-user.target'
-  
-  sudo systemctl enable watchdog.service
-  sudo systemctl start watchdog.service
-fi
-sudo systemctl status watchdog 
-
-```
 
 ## Stop / disable superfluous services and jobs
 
