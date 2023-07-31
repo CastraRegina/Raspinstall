@@ -33,7 +33,7 @@ if ! grep -q "server ${_NTPSERVER}" /etc/ntp.conf ; then
   echo "#   ntpq -p"                                           | sudo tee -a /etc/ntp.conf
   echo ""                                                      | sudo tee -a /etc/ntp.conf
   echo ""                                                      | sudo tee -a /etc/ntp.conf
-  sudo systemctl restart ntp | tee -a ${LOGFILE}
+  sudo systemctl restart ntp
 fi
 sudo systemctl status ntp
 ntpq -p
