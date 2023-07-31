@@ -322,6 +322,10 @@ Runs for approximately 33 minutes.
 Check if LOCALE error occurrs.
 
 
+## Run 100_setup_ntp.sh
+
+## Run 110_setup_watchdog.sh
+TODO: see ...
 
 
 
@@ -332,33 +336,6 @@ Check if LOCALE error occurrs.
 
 
 
-
-## Setup of ntp time server
-TODO: Check settings for what they are good for???
-```
-if ! grep -q "server ${_NTPSERVER}" /etc/ntp.conf ; then
-  sudo sed -i /etc/ntp.conf -e "s/^pool /#pool /"
-  echo ""                                                      | sudo tee -a /etc/ntp.conf
-  echo ""                                                      | sudo tee -a /etc/ntp.conf
-  echo "# set an internal NTP server (min ca. 1h=68min=2^12)"  | sudo tee -a /etc/ntp.conf
-  echo "server ${_NTPSERVER} iburst minpoll 12 maxpoll 17"     | sudo tee -a /etc/ntp.conf
-  echo "#server 0.de.pool.ntp.org  minpoll 12 maxpoll 17"      | sudo tee -a /etc/ntp.conf
-  echo "#server 1.de.pool.ntp.org  minpoll 12 maxpoll 17"      | sudo tee -a /etc/ntp.conf
-  echo "#server 2.de.pool.ntp.org  minpoll 12 maxpoll 17"      | sudo tee -a /etc/ntp.conf
-  echo "#server 3.de.pool.ntp.org  minpoll 12 maxpoll 17"      | sudo tee -a /etc/ntp.conf
-  echo "#server ptbtime1.ptb.de    minpoll 12 maxpoll 17"      | sudo tee -a /etc/ntp.conf
-  echo "# update by hand (in case of trouble):"                | sudo tee -a /etc/ntp.conf
-  echo "#   sudo systemctl stop ntp"                           | sudo tee -a /etc/ntp.conf
-  echo "#   sudo ntpd -qg"                                     | sudo tee -a /etc/ntp.conf
-  echo "#   sudo systemctl start ntp"                          | sudo tee -a /etc/ntp.conf
-  echo "#   ntpq -p"                                           | sudo tee -a /etc/ntp.conf
-  echo ""                                                      | sudo tee -a /etc/ntp.conf
-  echo ""                                                      | sudo tee -a /etc/ntp.conf
-  sudo systemctl restart ntp | tee -a ${LOGFILE}
-fi
-sudo systemctl status ntp
-ntpq -p
-```
 
 ## Samba setup
 TODO: Check settings for what they are good for???
@@ -374,8 +351,6 @@ nmap -p- 192.168.2.163
 nmap -sT -p 1-65535 192.168.2.163
 ```
  
-## Collect and save weather-data
-
 ## Include "multiverse" repository
 TODO: following is not yet working:
 ```
@@ -384,47 +359,7 @@ sudo apt update
 sudo apt install ubuntu-restricted-extras
 ```
 
-## Mount usbhdd
-Check if still needed:
-```
-sudo vi /boot/config.txt
-  # max_usb_current=1
-```
-```
-# Create mount-point:
-_USBHDDMNTPT=/mnt/usbhdd01
-if [ ! -e "${_USBHDDMNTPT}" ] ; then
-  sudo mkdir -p "${_USBHDDMNTPT}"
-fi
 
-# Check available disks:
-sudo fdisk -l
-
-# Create partition table of USBHDD:
-sudo fdisk /dev/sda
-  # --> n p 1    t 83    p    w
-
-# Format USBHDD:
-sudo mkfs.ext3 -m 1 -L USBHDD01 /dev/sda1
-
-# Get blkid of USBHDD:
-sudo blkid /dev/sda1
-  # --> /dev/sda1: LABEL="USBHDD01" UUID="c6824e93-4e82-4086-b977-f4dd2bf1837b" SEC_TYPE="ext2" BLOCK_SIZE="4096" TYPE="ext3" PARTUUID="7306d5d2-01"
-
-# Edit /etc/fstab:
-# TODO: check the actual settings of the old Raspi
-# UUID=[UUID] /mnt/usbhdd01 [TYPE] defaults,auto,users,rw,nofail,noatime 0 3
-
-```
-
-Check USBHDD using SMART  
-TODO: check
-```
-sudo smartctl -d sat --smart=on --offlineauto=on --saveauto=on /dev/sda
-sudo smartctl -d sat -a /dev/sda
-sudo hdparm -I /dev/sda
-sudo smartctl -d sat -t short /dev/sda
-```
 
 ## Configure 10inch touchscreen
 TODO: check
@@ -490,15 +425,57 @@ TODO: stop/disable them
 TODO: check
 
 
+
 ---
 # Manual setups
-
 
 
 ## Automatic nightly reboot at 2:30
 ```
 sudo crontab -e
    #   30 2 * * * /sbin/shutdown -r now
+```
+
+
+## Mount usbhdd permanently
+Increase USB current limit
+```
+sudo vi /boot/config.txt
+max_usb_current=1     # support in sum up to 1.2A on all USB ports
+```
+Setup steps
+```
+# Create mount-point:
+_USBHDDMNTPT=/mnt/usbhdd01
+if [ ! -e "${_USBHDDMNTPT}" ] ; then
+  sudo mkdir -p "${_USBHDDMNTPT}"
+fi
+
+# Check available disks:
+sudo fdisk -l
+
+# Create partition table of USBHDD:
+sudo fdisk /dev/sda
+  # --> n p 1    t 83    p    w
+
+# Format USBHDD:
+sudo mkfs.ext3 -m 1 -L USBHDD01 /dev/sda1
+
+# Get blkid of USBHDD:
+sudo blkid /dev/sda1
+  # --> /dev/sda1: LABEL="USBHDD01" UUID="c6824e93-4e82-4086-b977-f4dd2bf1837b" SEC_TYPE="ext2" BLOCK_SIZE="4096" TYPE="ext3" PARTUUID="7306d5d2-01"
+
+# Edit /etc/fstab:
+# TODO: check the actual settings of the old Raspi
+# UUID=[UUID] /mnt/usbhdd01 [TYPE] defaults,auto,users,rw,nofail,noatime 0 3
+```
+
+Check USBHDD using SMART
+```
+sudo smartctl -d sat --smart=on --offlineauto=on --saveauto=on /dev/sda
+sudo smartctl -d sat -a /dev/sda
+sudo hdparm -I /dev/sda
+sudo smartctl -d sat -t short /dev/sda
 ```
 
 
@@ -789,6 +766,16 @@ Using [github's guide to generating SSH keys](https://docs.github.com/en/authent
   git commit -m "message"
   git push
   ```
+
+
+## Switch USB port power on / off
+See [stackoverflow.com:how-to-turn-usb-port-power-on-and-off-in-raspberry-pi-4](https://stackoverflow.com/questions/59772765/how-to-turn-usb-port-power-on-and-off-in-raspberry-pi-4)  
+Make sure sw package `uhubctl` is installed.
+```
+echo '1-1' | sudo tee /sys/bus/usb/drivers/usb/unbind    # shut off power
+echo '1-1' | sudo tee /sys/bus/usb/drivers/usb/bind      # turn on power
+```
+
 
 
 # Check out...
