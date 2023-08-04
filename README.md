@@ -344,6 +344,27 @@ Check if LOCALE error occurrs.
 
 # TODO : GO ON HERE ...
 
+## Stop / disable superfluous services
+
+### Services
+- What services are running?
+  ```
+  sudo systemctl --type=service --state=running
+  ```
+- Stop and disable services
+  - `colord.service` - Manage, Install and Generate Color Profiles
+  - `cups-browsed.service` - Make remote CUPS printers available locally
+  - `cups.service` - CUPS Scheduler
+  - `epmd.service` - Erlang Port Mapper Daemon
+  - `iscsid.service` - iSCSI initiator daemon (iscsid)
+  - `ModemManager.service` - Modem Manager
+  - `monit.service` - LSB: service and resource monitoring daemon
+  - `triggerhappy.service` - triggerhappy global hotkey daemon
+  - `unattended-upgrades.service` - Unattended Upgrades Shutdown
+  - `wpa_supplicant.service` - WPA supplicant
+
+### Regular update jobs
+TODO: check
 
 
 
@@ -399,17 +420,7 @@ fi
 ```
 
 
-## Stop / disable superfluous services and jobs
 
-### Services
-What services are running?
-```
-sudo systemctl --type=service --state=running
-```
-TODO: stop/disable them
-
-### Regular update jobs
-TODO: check
 
 
 
