@@ -19,13 +19,13 @@ set -u   # treat unset variables as an error and exit immediately
 # -------------------------------------------------------------------------------
 # Stop and disable services one by one
 # -------------------------------------------------------------------------------
-for service in _DISABLESERVICES ; do
+for service in ${_DISABLESERVICES} ; do
   sudo systemctl stop    "${service}"
   sudo systemctl disable "${service}"
 done
 
 # show currently running services:
-sudo systemctl --type=service --state=running
+# sudo systemctl --type=service --state=running
 
 
 
