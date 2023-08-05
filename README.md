@@ -339,19 +339,15 @@ Check if LOCALE error occurrs.
 [`110_setup_watchdog.sh`](02_install_Raspi/110_setup_watchdog.sh)  
 
 
-
-
-
-# TODO : GO ON HERE ...
-
-## Stop / disable superfluous services
-
-### Services
+## Run 120_disable_services.sh
+[120_disable_services.sh](02_install_Raspi/120_disable_services.sh)  
+Stop / disable superfluous services
 - What services are running?
   ```
   sudo systemctl --type=service --state=running
   ```
 - Stop and disable services
+  - `avahi-daemon.service` - Avahi mDNS/DNS-SD Stack
   - `colord.service` - Manage, Install and Generate Color Profiles
   - `cups-browsed.service` - Make remote CUPS printers available locally
   - `cups.service` - CUPS Scheduler
@@ -359,15 +355,31 @@ Check if LOCALE error occurrs.
   - `iscsid.service` - iSCSI initiator daemon (iscsid)
   - `ModemManager.service` - Modem Manager
   - `monit.service` - LSB: service and resource monitoring daemon
+  - `nfs-blkmap.service` - pNFS block layout mapping daemon
+  - `nfs-idmapd.service` - NFSv4 ID-name mapping service
+  - `nfs-mountd.service` - NFS Mount Daemon
   - `triggerhappy.service` - triggerhappy global hotkey daemon
   - `unattended-upgrades.service` - Unattended Upgrades Shutdown
+  - `winbind.service` - Samba Winbind Daemon
   - `wpa_supplicant.service` - WPA supplicant
 
-### Regular update jobs
-TODO: check
+TODO: check iscsid and nfs as they reappear after reboot.
+
+
+- Stop regular update jobs  
+  TODO: check
+  ```
+  sudo vi /etc/apt/apt.conf.d/20auto-upgrades
+  # replace content of file by following lines:
+  APT::Periodic::Update-Package-Lists "0";
+  APT::Periodic::Download-Upgradeable-Packages "0";
+  APT::Periodic::AutocleanInterval "0";
+  APT::Periodic::Unattended-Upgrade "0";
+  ```
 
 
 
+# TODO : GO ON HERE ...
 
 ## Samba setup
 TODO: Check settings for what they are good for???
