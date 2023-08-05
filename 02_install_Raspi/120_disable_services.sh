@@ -45,7 +45,7 @@ sudo systemctl stop    epmd
 sudo systemctl disable epmd
 sudo systemctl stop    epmd.socket
 sudo systemctl disable epmd.socket
-sudo apt remove -y     epmd
+sudo apt remove -y     erlang-base erlang-crypto erlang-syntax-tools
 
 #triggerhappy
 sudo systemctl stop    triggerhappy 
