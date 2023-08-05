@@ -29,3 +29,7 @@ if is_pi ; then
   # sudo rpi-update 
 fi
 
+
+
+echo 
+echo "Script finished."

@@ -34,3 +34,8 @@ if ! grep -q "bcm2835_wdt" /etc/modules ; then
   sudo systemctl start watchdog.service
 fi
 sudo systemctl status watchdog 
+
+
+
+echo
+echo "Script finished."

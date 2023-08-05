@@ -29,8 +29,9 @@ done
 # -------------------------------------------------------------------------------
 # Take special care of some services...
 # -------------------------------------------------------------------------------
-
 # avahi
+echo
+echo "disabling avahi ..."
 sudo systemctl stop avahi-daemon
 sudo systemctl disable avahi-daemon
 sudo systemctl stop avahi-daemon.socket
@@ -41,6 +42,8 @@ sudo systemctl mask avahi-daemon.service
 sudo systemctl daemon-reload
 
 #epmd
+echo
+echo "disabling epmd / erlang ..."
 sudo systemctl stop    epmd
 sudo systemctl disable epmd
 sudo systemctl stop    epmd.socket
@@ -48,6 +51,8 @@ sudo systemctl disable epmd.socket
 sudo apt remove -y     erlang-base erlang-crypto erlang-syntax-tools
 
 #triggerhappy
+echo
+echo "disabling triggerhappy ..."
 sudo systemctl stop    triggerhappy 
 sudo systemctl disable triggerhappy
 sudo systemctl stop    triggerhappy.socket 
@@ -58,11 +63,15 @@ sudo apt remove -y     triggerhappy
 # -------------------------------------------------------------------------------
 # Stop and disable automatic update services
 # -------------------------------------------------------------------------------
+echo
+echo "disabling automatic apt updates ..."
 sudo systemctl disable apt-daily.service
 sudo systemctl disable apt-daily.timer
 sudo systemctl disable apt-daily-upgrade.service
 sudo systemctl disable apt-daily-upgrade.timer
 
+echo
+echo "disabling packagekit ..."
 sudo systemctl stop packagekit.service
 sudo systemctl disable packagekit.service
 sudo systemctl mask packagekit.service
@@ -72,6 +81,11 @@ sudo systemctl mask packgekit-offline-update.service
 
 
 
-echo "Script finished."
+echo
 echo "show currently running services:"
 echo "  sudo systemctl --type=service --state=running"
+
+
+
+echo 
+echo "Script finished."

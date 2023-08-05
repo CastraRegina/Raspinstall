@@ -87,3 +87,6 @@ sudo apt clean
 sudo du -sh /var/cache/apt/archives/
 
 
+
+echo
+echo "Script finished."

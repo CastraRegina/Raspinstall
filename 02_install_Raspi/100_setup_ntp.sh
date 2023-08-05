@@ -37,3 +37,8 @@ if ! grep -q "server ${_NTPSERVER}" /etc/ntp.conf ; then
 fi
 sudo systemctl status ntp
 ntpq -p
+
+
+
+echo
+echo "Script finished."

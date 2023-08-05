@@ -145,3 +145,7 @@ if is_pi ; then
   sudo systemctl disable dphys-swapfile
 fi
 
+
+
+echo 
+echo "Script finished."

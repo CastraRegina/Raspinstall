@@ -37,3 +37,7 @@ if is_pi ; then
   sudo apt -y install network-manager network-manager-gnome
 fi
 
+
+
+echo 
+echo "Script finished."

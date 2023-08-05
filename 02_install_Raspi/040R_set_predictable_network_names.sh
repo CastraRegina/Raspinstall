@@ -33,6 +33,7 @@ if is_pi ; then
 fi
 
 
-echo
-echo "Now do a sudo reboot"
 
+echo
+echo "Script finished."
+echo "Now do a sudo reboot"
