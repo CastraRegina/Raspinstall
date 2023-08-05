@@ -24,10 +24,35 @@ for service in ${_DISABLESERVICES} ; do
   sudo systemctl disable "${service}"
 done
 
-# show currently running services:
-# sudo systemctl --type=service --state=running
 
 
+# -------------------------------------------------------------------------------
+# Take special care of some services...
+# -------------------------------------------------------------------------------
+
+# avahi
+sudo systemctl stop avahi-daemon
+sudo systemctl disable avahi-daemon
+sudo systemctl stop avahi-daemon.socket
+sudo systemctl disable avahi-daemon.socket
+sudo systemctl stop avahi-daemon.service
+sudo systemctl disable avahi-daemon.service
+sudo systemctl mask avahi-daemon.service
+sudo systemctl daemon-reload
+
+#epmd
+sudo systemctl stop    epmd
+sudo systemctl disable epmd
+sudo systemctl stop    epmd.socket
+sudo systemctl disable epmd.socket
+sudo apt remove -y     epmd
+
+#triggerhappy
+sudo systemctl stop    triggerhappy 
+sudo systemctl disable triggerhappy
+sudo systemctl stop    triggerhappy.socket 
+sudo systemctl disable triggerhappy.socket
+sudo apt remove -y     triggerhappy
 
 
 # -------------------------------------------------------------------------------
@@ -44,3 +69,9 @@ sudo systemctl mask packagekit.service
 sudo systemctl stop packagekit-offline-update.service
 sudo systemctl disable packagekit-offline-update.service
 sudo systemctl mask packgekit-offline-update.service
+
+
+
+echo "Script finished."
+echo "show currently running services:"
+echo "  sudo systemctl --type=service --state=running"
