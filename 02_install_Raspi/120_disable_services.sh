@@ -80,6 +80,36 @@ sudo systemctl disable packagekit-offline-update.service
 sudo systemctl mask packgekit-offline-update.service
 
 
+# -------------------------------------------------------------------------------
+# Disable automatic apt-updates by assigning "0" in the config-file
+# -------------------------------------------------------------------------------
+echo
+FILE_APT20AUTOUPGRADES=/etc/apt/apt.conf.d/20auto-upgrades
+
+# comment out the enabled ("1") services:
+sudo sed -i 's/^\s*APT::Periodic::Update-Package-Lists.*1.*$/# &/'           ${FILE_APT20AUTOUPGRADES} 
+sudo sed -i 's/^\s*APT::Periodic::Download-Upgradeable-Packages.*1.*$/# &/'  ${FILE_APT20AUTOUPGRADES} 
+sudo sed -i 's/^\s*APT::Periodic::AutocleanInterval.*1.*$/# &/'              ${FILE_APT20AUTOUPGRADES}
+sudo sed -i 's/^\s*APT::Periodic::Unattended-Upgrade.*1.*$/# &/'             ${FILE_APT20AUTOUPGRADES}
+
+# disable the services by assigning "0" if not already done:
+if [ ! -f "${FILE_APT20AUTOUPGRADES}" ] || ! grep -q '^APT::Periodic::Update-Package-Lists "0";\s*$' ${FILE_APT20AUTOUPGRADES} ; then
+  echo 'APT::Periodic::Update-Package-Lists "0";' | sudo tee -a ${FILE_APT20AUTOUPGRADES}
+fi
+
+if [ ! -f "${FILE_APT20AUTOUPGRADES}" ] || ! grep -q '^APT::Periodic::Download-Upgradeable-Packages "0";\s*$' ${FILE_APT20AUTOUPGRADES} ; then
+  echo 'APT::Periodic::Download-Upgradeable-Packages "0";' | sudo tee -a ${FILE_APT20AUTOUPGRADES}
+fi
+
+if [ ! -f "${FILE_APT20AUTOUPGRADES}" ] || ! grep -q '^APT::Periodic::AutocleanInterval "0";\s*$' ${FILE_APT20AUTOUPGRADES} ; then
+  echo 'APT::Periodic::AutocleanInterval "0";' | sudo tee -a ${FILE_APT20AUTOUPGRADES}
+fi
+
+if [ ! -f "${FILE_APT20AUTOUPGRADES}" ] || ! grep -q '^APT::Periodic::Unattended-Upgrade "0";\s*$' ${FILE_APT20AUTOUPGRADES} ; then
+  echo 'APT::Periodic::Unattended-Upgrade "0";' | sudo tee -a ${FILE_APT20AUTOUPGRADES}
+fi
+
+
 
 echo
 echo "show currently running services:"
