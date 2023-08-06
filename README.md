@@ -340,8 +340,8 @@ Check if LOCALE error occurrs.
 
 
 ## Run 120_disable_services.sh
-[120_disable_services.sh](02_install_Raspi/120_disable_services.sh)  
-Stop / disable superfluous services
+[120_disable_services.sh](02_install_Raspi/120_disable_services.sh) 
+to stop / disable "superfluous" services
 - What services are running?
   ```
   sudo systemctl --type=service --state=running
@@ -363,14 +363,11 @@ Stop / disable superfluous services
   - `winbind.service` - Samba Winbind Daemon
   - `wpa_supplicant.service` - WPA supplicant
 
-TODO: check iscsid and nfs as they reappear after reboot.
+  Remark: `iscsid` and `nfs-*` services reappear after reboot.
 
-
-- Stop regular update jobs  
-  TODO: check
+- Regular apt update jobs are stopped by commenting-out all entries of  
+  `/etc/apt/apt.conf.d/20auto-upgrades` and adding following lines:
   ```
-  sudo vi /etc/apt/apt.conf.d/20auto-upgrades
-  # replace content of file by following lines:
   APT::Periodic::Update-Package-Lists "0";
   APT::Periodic::Download-Upgradeable-Packages "0";
   APT::Periodic::AutocleanInterval "0";
