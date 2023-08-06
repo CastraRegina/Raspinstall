@@ -378,6 +378,12 @@ to stop / disable "superfluous" services
   APT::Periodic::Unattended-Upgrade "0";
   ```
 
+## Next steps
+- Setup [Automatic nightly reboot at 2:30](#automatic-nightly-reboot-at-230)
+- Install and [Setup "Log Weather Data"](#setup-log-weather-data)
+  - Check setup of [Automatic nightly reboot at 2:30](#automatic-nightly-reboot-at-230)
+  - Add crontab-entries to start "Log-Weather-Data" at boot-time
+- [Setup ssh github access](#setup-ssh-github-access)
 
 
 # TODO : GO ON HERE ...
@@ -730,7 +736,7 @@ See [https://www.garron.me/en/linux/add-secondary-ip-linux.html](https://www.gar
   sudo crontab -e
     #   30 2 * * * /sbin/shutdown -r now
   ```
-- Update fk's `crontab`:
+- Update fk's `crontab` by `crontab -e`:
   ```
   @reboot /usr/bin/screen -d -m /bin/bash /home/fk/bin/logWeatherData/logWeatherData.sh
   29 * * * * /home/fk/bin/logWeatherData/saveLogToday.sh
