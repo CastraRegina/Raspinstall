@@ -255,6 +255,10 @@ Remark:
 All `sh`-scripts source [`000_common.sh`](02_install_Raspi/000_common.sh)
 
 
+## Update settings
+Modify variables in [`000_common.sh`](02_install_Raspi/000_common.sh) 
+
+
 ## Run 010_install_initial_packages.sh
 [`010_install_initial_packages.sh`](02_install_Raspi/010_install_initial_packages.sh)  
 Runs for approximately 2 minutes.
