@@ -384,6 +384,8 @@ to stop / disable "superfluous" services
   - Check setup of [Automatic nightly reboot at 2:30](#automatic-nightly-reboot-at-230)
   - Add crontab-entries to start "Log-Weather-Data" at boot-time
 - [Setup ssh github access](#setup-ssh-github-access)
+- [Mount usbhdd permanently](#mount-usbhdd-permanently)
+- TODO: setup samba
 
 
 # TODO : GO ON HERE ...
@@ -395,12 +397,6 @@ echo "samba-common    samba-common/do_debconf boolean true"  | sudo debconf-set-
 echo "samba-common    samba-common/dhcp       boolean false" | sudo debconf-set-selections
 ```
 
-## Scan open ports and close them
-TODO: check also regarding VNC-server
-```
-nmap -p- 192.168.2.163
-nmap -sT -p 1-65535 192.168.2.163
-```
  
 ## Include "multiverse" repository
 TODO: following is not yet working:
@@ -795,7 +791,87 @@ echo '1-1' | sudo tee /sys/bus/usb/drivers/usb/bind      # turn on power
 ```
 
 
+## Install Visual Studio Code or VSCodium
+- Install [Visual Studio Code](https://code.visualstudio.com/) or [VSCodium](https://vscodium.com)
+  - Download: [code.visualstudio.com/download](https://code.visualstudio.com/download)
+    or [github.com/VSCodium](https://github.com/VSCodium/vscodium/releases)
+  - For VS Code...
+    - Extract `.tar.gz`-file into folder `/opt/VSCode`
+    - Start VS Code: `/opt/VSCode/code`
+  - VSCodium is also available in [Snap Store](https://snapcraft.io/) as [Codium](https://snapcraft.io/codium), but did not work well on Raspi so far (2023-07)...
+    - Install: `snap install codium --classic`
+- Install extensions:
+  - Python extension for Visual Studio Code (ms-python.python)
+  - Python indent (KevinRose.vsc-python-indent)
+  - autoDocstring - Python Docstring Generator (njpwerner.autodocstring)
+  - Pylance (ms-python.vscode-pylance) (seems to be already installed by ms-python.python)
+  - Pylint (ms-python.pylint)
+  - GitLens - Git supercharged (eamodio.gitlens)
+  - Markdown Preview Mermaid Support (bierner.markdown-mermaid) for diagrams and flowcharts
+  - XML (redhat.vscode-xml)
+  - Code Spell Checker (streetsidesoftware.code-spell-checker)
+  - Todo Tree (Gruntfuggly.todo-tree)
+  - Flake8 (ms-python.flake8)
+- Extensions to check later:
+  - Code Runner (formulahendry.code-runner)
+  - Python Extension Pack (donjayamanne.python-extension-pack)
+  - Tabnine AI Autocomplete (TabNine.tabnine-vscode)
+  - GitHub Copilot (GitHub.copilot) for autocompletion
+  - python snippets (frhtylcn.pythonsnippets)
+  - AREPL for python (almenon.arepl)
+  - Vim (vscodevim.vim)
+- Setup / modify settings (`File->Preferences->Settings [Ctrl+,]`):
+  - Editor: Format On Save: check-on
+  - Editor: Default Formatter: Python (ms-python.python)
+  - Python > Analysis: Type Checking Mode: basic
+  - Python > Formatting: Provider: autopep8
+  - Python > Linting: Enabled: check-on
+  - Python > Linting: Flake8 Enabled: check-on
+  - Edit `$HOME/.config/Code/User/settings.json`:  
+    `"editor.rulers": [79]`
+  - Python Select Interpreter: `./venv/bin/python`
+- Setting for python `src`-folder
+  - See [Setting Python source folders in Visual Studio Code](https://binx.io/2020/03/05/setting-python-source-folders-vscode/)
+  - Modify `settings.json`
+    ```
+    {
+      "terminal.integrated.env.osx": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+      },
+      "terminal.integrated.env.linux": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+      },
+      "terminal.integrated.env.windows": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+      },
+      "python.envFile": "${workspaceFolder}/.env"
+    }
+    ```
+  - Modify `.env` : `PYTHONPATH=./src`
+  - or:  
+    ```
+    {
+      "terminal.integrated.env.osx": {
+        "PYTHONPATH": "${env:PYTHONPATH}:${workspaceFolder}/src",
+      },
+      "terminal.integrated.env.linux": {
+        "PYTHONPATH": "${env:PYTHONPATH}:${workspaceFolder}/src",
+      },
+      "terminal.integrated.env.windows": {
+        "PYTHONPATH": "${env:PYTHONPATH};${workspaceFolder}/src",
+      }
+    }
+    ```
+  - ... and: `PYTHONPATH=${PYTHONPATH}:./src`
+- Helpful Keyboard Shortcuts (`File->Preferences->Keyboard Shortcuts [Ctrl+K Ctrl+S]`, `keybindings.json`)
+  - `Ctrl+Shift+P` to open the Command Palette
+  - `Crtl+Shift+7` Fold All Block Comments
+  - `Crtl+x`       Remove whole line (if nothing is selected)
+  - `Crtl+RETURN`  Python: Run Python File in Terminal (assigned by using `Ctrl+Shift+P`)
 
+
+---
+---
 # Check out...
 ## Set secondary network IP address and/or further interface 
 TODO
