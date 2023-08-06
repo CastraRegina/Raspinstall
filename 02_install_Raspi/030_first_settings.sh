@@ -146,6 +146,13 @@ if is_pi ; then
 fi
 
 
+# -------------------------------------------------------------------------------
+# Disable vim automatic visual mode on mouse select
+# -------------------------------------------------------------------------------
+if [ ! -f "${HOME}/.vimrc" ] || ! grep -q "set mouse-=a" ${HOME}/.vimrc ; then
+  echo 'set mouse-=a' >> ${HOME}/.vimrc
+fi
+
 
 echo 
 echo "Script finished."
