@@ -249,6 +249,7 @@ passwd
 
 ## Download scripts
 ```
+git clone git@github.com:CastraRegina/Raspinstall.git
 git clone https://github.com/CastraRegina/Raspinstall.git
 ```
 Remark:  
@@ -256,7 +257,11 @@ All `sh`-scripts source [`000_common.sh`](02_install_Raspi/000_common.sh)
 
 
 ## Update settings
-Modify variables in [`000_common.sh`](02_install_Raspi/000_common.sh) 
+Modify variables in [`000_common.sh`](02_install_Raspi/000_common.sh)  
+Or better:  
+- Execute [`010_install_initial_packages.sh`](02_install_Raspi/010_install_initial_packages.sh) to update `vim`.  
+- Then modify [`000_common.sh`](02_install_Raspi/000_common.sh)  
+- Then go on executing further scripts...
 
 
 ## Run 010_install_initial_packages.sh
@@ -873,6 +878,12 @@ echo '1-1' | sudo tee /sys/bus/usb/drivers/usb/bind      # turn on power
 ---
 ---
 # Check out...
+
+## Force ssh to only allow users with a key to log in
+
+## Use btrfs and create snapshots
+TODO
+
 ## Set secondary network IP address and/or further interface 
 TODO
 
