@@ -388,6 +388,7 @@ to stop / disable "superfluous" services
 - Install and [Setup "Log Weather Data"](#setup-log-weather-data)
   - Check setup of [Automatic nightly reboot at 2:30](#automatic-nightly-reboot-at-230)
   - Add crontab-entries to start "Log-Weather-Data" at boot-time
+- [No cleanup of /dev/shm at ssh-logout](#no-cleanup-of-devshm-at-ssh-logout)
 - [Setup ssh github access](#setup-ssh-github-access)
 - [Mount usbhdd permanently](#mount-usbhdd-permanently)
 - TODO: setup samba
@@ -513,8 +514,7 @@ UPDATE: Looks like the current default with `2023-05-03-raspios-bullseye-armhf-f
 
 
 
-## (No cleanup of /dev/shm at ssh-logout)
-UPDATE: Looks like the current default with `2023-05-03-raspios-bullseye-armhf-full.img` is set to not clean `/dev/shm` at logout of a user (like intended).  
+## No cleanup of /dev/shm at ssh-logout
 See [https://superuser.com/questions/1117764/why-are-the-contents-of-dev-shm-is-being-removed-automatically](https://superuser.com/questions/1117764/why-are-the-contents-of-dev-shm-is-being-removed-automatically) .  
 Check setting of `RemoveIPC` in `/etc/systemd/logind.conf`.  
 It must be uncommented and set to `no`:
