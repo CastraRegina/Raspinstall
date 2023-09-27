@@ -755,8 +755,11 @@ Using [github's guide to generating SSH keys](https://docs.github.com/en/authent
 - Login to [github.com](https://github.com)
 - Goto [profile-->settings](https://github.com/settings/profile)
 - Goto [SSH and GPG keys](https://github.com/settings/keys)
-- Add ssh-key to `SSH keys`  
-  (add whole line, i.e. `ssh-ed25519 AA.....MY git@github.com`)
+- Add ssh-key to `SSH keys` using the `New SSH key` button  
+  - `Title` like "fk at mlc5"
+  - use `Key type` = `Authentication Key`  
+  - add whole line, i.e. `ssh-ed25519 AA.....MY git@github.com`
+  
   ```
   cat ~/.ssh/id_ed25519.pub
   ``` 
