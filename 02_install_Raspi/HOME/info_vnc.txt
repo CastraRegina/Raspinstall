@@ -1,0 +1,5 @@
+sudo systemctl start vncserver-x11-serviced.service
+vncserver-virtual -geometry 1800x1000
+sudo systemctl stop vncserver-x11-serviced.service
+vncserver-virtual -kill :1
+cat ~/.vnc/*.pid
