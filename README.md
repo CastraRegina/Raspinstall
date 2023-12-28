@@ -255,6 +255,16 @@ rmdir  "${ROOTFSDIR}" || echo "error rmdir ${ROOTFSDIR}"
 - Info: To call `/usr/bin/raspi-config` script in non-interactive mode,  
 see
 [https://forums.raspberrypi.com/viewtopic.php?t=21632](https://forums.raspberrypi.com/viewtopic.php?t=21632)
+
+
+## First: do a `raspi-config`
+`sudo raspi-config`
+- Localisation Options  
+  set it to...  
+  `de_DE.UTF-8 UTF-8`
+
+
+
 ## Change standard password of user
 ```
 passwd
