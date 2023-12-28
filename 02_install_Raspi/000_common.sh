@@ -42,7 +42,7 @@ export LOCALE="$(echo ${_LOCALELINE} | cut -f1 -d " ")"
 
 if is_pi ; then
   if [ -e /proc/device-tree/chosen/os_prefix ]; then
-    PREFIX="$(cat /proc/device-tree/chosen/os_prefix)"
+    PREFIX="$(tr -d '\0' </proc/device-tree/chosen/os_prefix)"
   fi
   export _CMDLINE="/boot/${PREFIX}cmdline.txt"
 else
