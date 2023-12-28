@@ -18,14 +18,28 @@ git clone https://github.com/CastraRegina/Raspinstall.git
 ```
 
 ## Download image(s)
-Download [Raspberry Pi OS](https://www.raspberrypi.com/software/operating-systems/):  
-For example `2023-05-03-raspios-bullseye-armhf-full.img.xz`:  
-[Raspberry Pi OS with desktop and recommended software](https://downloads.raspberrypi.org/raspios_full_armhf/images/raspios_full_armhf-2023-05-03/2023-05-03-raspios-bullseye-armhf-full.img.xz)
+Download [Raspberry Pi OS](https://www.raspberrypi.com/software/operating-systems/):   
+[Raspberry Pi OS with desktop and recommended software](https://downloads.raspberrypi.com/raspios_full_armhf/images/).  
+For example `2023-12-05-raspios-bookworm-armhf-full.img.xz`.  
+**Check the `SHA256` checksum after complete download!!!**
+```bash
+sha256sum -c *.sha256
+```
 
 ## Extract image
-Extract the image file at its place:  
-`xz -v -d 2023-05-03-raspios-bullseye-armhf-full.img.xz`  
-This will extract the 11GB image file `2023-05-03-raspios-bullseye-armhf-full.img`.
+Extract the image file at its place:
+```bash
+xz -v -d 2023-12-05-raspios-bookworm-armhf-full.img.xz
+```  
+This will extract the 12GB image file.
+
+
+
+**Following steps are all included in bash-script 
+[01_install_SD_card/install_SD_card_010.sh](01_install_SD_card/install_SD_card_010.sh).  
+Please check and update the settings (environment variables) first before executing!!!**  
+This bash-script contains the latest updates.  
+
 
 ## Setting environment variables
 Do a `sudo su -` to be `root`...  
@@ -602,6 +616,24 @@ or [https://opensource.com/article/18/3/print-server-raspberry-pi](https://opens
   - Select model (first entry: HP LaserJet 1100, hpcups 3.21.2 (en))
   - Set default options (Check `Media Size: A4` and `Print Quality: Best`)
   - Goto `Printers`-Tab and print a test page
+- Example-settings:
+  - file `000_common.sh`
+    ```bash
+    export _HOSTNAME="rbgprint01"
+    export _IPADDRESS="192.168.2.111"
+    export _DOMAIN="ladomain"
+    export _ROUTERS="192.168.2.1"
+    export _NAMESERVERS="192.168.2.1"
+    export _NTPSERVER="192.168.2.1"
+    ```
+  - do not disable *swapping* for a print-server,
+    see file `030_first_settings.sh`
+    ```bash
+    # if is_pi ; then
+    #   sudo dphys-swapfile swapoff
+    #   sudo systemctl disable dphys-swapfile
+    # fi
+    ```
 - TODO:
   - Check if SAMBA settings are needed to access the printer from Windows
   - Check if these settings are persistent
@@ -777,7 +809,7 @@ Using [github's guide to generating SSH keys](https://docs.github.com/en/authent
   ```
 - Specify your git global data
   ```
-  git config --global user.email "git@github.com"
+  git config --global user.email "castraregina@xyz.net"   # replace by correct email-address, see github-settings
   git config --global user.name "fk"
   ```
 - Enjoy the usual git workstyle
