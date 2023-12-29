@@ -611,9 +611,14 @@ or [https://opensource.com/article/18/3/print-server-raspberry-pi](https://opens
 - Check if the standard user is already member of group `lpadmin` by: `id $USER`.  
   If not, do a
   ```
-  sudo usermod -a -G lpadmin $USER`
+  sudo usermod -a -G lpadmin $USER
   ```
 - Does the Raspi already have a static IP-address? Check `/etc/dhcpcd.conf`. 
+- Enable `cups`-services if they were disabled
+  ```bash
+  sudo systemctl enable cups
+  sudo systemctl enable cups-browsed
+  ```
 - Make CUPS accessible across the network
   ```
   sudo cupsctl --remote-any
@@ -636,6 +641,8 @@ or [https://opensource.com/article/18/3/print-server-raspberry-pi](https://opens
     export _NAMESERVERS="192.168.2.1"
     export _NTPSERVER="192.168.2.1"
     ```
+    ... and do not disable `cups` services:  
+    `export _DISABLESERVICES= ... cups cups-browsed ...`
   - do not disable *swapping* for a print-server,
     see file `030_first_settings.sh`
     ```bash
