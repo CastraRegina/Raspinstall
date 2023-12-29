@@ -603,10 +603,11 @@ RemoveIPC=no
 ## (optional) Network print server
 See also [https://www.tomshardware.com/how-to/raspberry-pi-print-server](https://www.tomshardware.com/how-to/raspberry-pi-print-server)  
 or [https://medium.com/@anirudhgupta281998/setup-a-print-server-using-raspberry-pi-cups-part-2-2d6d48ccdc32](https://medium.com/@anirudhgupta281998/setup-a-print-server-using-raspberry-pi-cups-part-2-2d6d48ccdc32)  
-or [https://opensource.com/article/18/3/print-server-raspberry-pi](https://opensource.com/article/18/3/print-server-raspberry-pi)
-- Make sure cups is installed
+or [https://opensource.com/article/18/3/print-server-raspberry-pi](https://opensource.com/article/18/3/print-server-raspberry-pi)  
+or [https://ubuntu.com/server/docs/service-cups](https://ubuntu.com/server/docs/service-cups)
+- Make sure cups (and friends) is installed
   ```
-  sudo apt -y install cups
+  sudo apt -y install cups hplip hplip-gui printer-driver-hpcups printer-driver-cups-pdf hp-ppd hplip-doc hpijs-ppds openprinting-ppds foomatic-db-gutenprint gutenprint-locales gutenprint-doc system-config-printer
   ```
 - Check if the standard user is already member of group `lpadmin` by: `id $USER`.  
   If not, do a
@@ -651,6 +652,10 @@ or [https://opensource.com/article/18/3/print-server-raspberry-pi](https://opens
     #   sudo systemctl disable dphys-swapfile
     # fi
     ```
+- Problems with reattaching USB solved by:
+  ```bash
+  lpadmin -p PRINTERNAME -o usb-no-reattach-default=true
+  ```
 - TODO:
   - Check if SAMBA settings are needed to access the printer from Windows
   - Check if these settings are persistent
