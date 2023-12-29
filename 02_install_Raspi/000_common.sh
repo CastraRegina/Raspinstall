@@ -54,7 +54,7 @@ export -f is_pi
 export _SW2INSTALL="pv xterm nmap smartmontools geeqie xserver-xorg-input-evdev xinput-calibrator matchbox-keyboard git"
 export _SW2INSTALL="$_SW2INSTALL gcc build-essential cmake v4l-utils ffmpeg vlc vlc-bin autoconf-archive gnu-standards"
 export _SW2INSTALL="$_SW2INSTALL autoconf-doc dh-make gettext-doc libasprintf-dev libgettextpo-dev libtool-doc gfortran"
-export _SW2INSTALL="$_SW2INSTALL mplayer gnome-mplayer gecko-mediaplayer gphoto2 parted gparted rdiff-backup"
+export _SW2INSTALL="$_SW2INSTALL mplayer gnome-mplayer gecko-mediaplayer gphoto2 parted gparted rdiff-backup sysstat"
 export _SW2INSTALL="$_SW2INSTALL iftop net-tools netstat-nat netcat fbi autocutsel epiphany-browser gpsd gpsd-clients"
 export _SW2INSTALL="$_SW2INSTALL python-gps python-gobject-2-dbg python-gtk2-doc devhelp python-gdbm-dbg python-tk-dbg"
 export _SW2INSTALL="$_SW2INSTALL iw wpasupplicant wireless-tools python-pil.imagetk libjpeg62-turbo libjpeg62-turbo-dev"
