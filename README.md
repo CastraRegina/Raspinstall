@@ -366,6 +366,7 @@ Check if LOCALE error occurrs.
 
 ## Run 100_setup_ntp.sh
 [`100_setup_ntp.sh`](02_install_Raspi/100_setup_ntp.sh)  
+TODO: looks like `ntpsec` is a replacement of `ntp` --> check settings...
 
 
 ## Run 110_setup_watchdog.sh
@@ -607,7 +608,7 @@ or [https://opensource.com/article/18/3/print-server-raspberry-pi](https://opens
 or [https://ubuntu.com/server/docs/service-cups](https://ubuntu.com/server/docs/service-cups)
 - Make sure cups (and friends) is installed
   ```
-  sudo apt -y install cups hplip hplip-gui printer-driver-hpcups printer-driver-cups-pdf hp-ppd hplip-doc hpijs-ppds openprinting-ppds foomatic-db-gutenprint gutenprint-locales gutenprint-doc system-config-printer
+  sudo apt -y install cups hplip hplip-gui printer-driver-hpcups printer-driver-cups-pdf hp-ppd hplip-doc hpijs-ppds openprinting-ppds foomatic-db gutenprint-locales gutenprint-doc system-config-printer
   ```
 - Check if the standard user is already member of group `lpadmin` by: `id $USER`.  
   If not, do a
