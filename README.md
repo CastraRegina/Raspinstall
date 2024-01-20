@@ -662,6 +662,8 @@ or [https://ubuntu.com/server/docs/service-cups](https://ubuntu.com/server/docs/
     cat /proc/swaps
     swapon -s
     ```
+  - Increase swap space by editing `/etc/dphys-swapfile`:  
+    `CONF_SWAPSIZE=256`
 - Problems with reattaching USB solved by:
   ```bash
   lpstat -p   # list available printers
