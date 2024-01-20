@@ -653,8 +653,18 @@ or [https://ubuntu.com/server/docs/service-cups](https://ubuntu.com/server/docs/
     #   sudo systemctl disable dphys-swapfile
     # fi
     ```
+    If swap is already disabled, following will enable it again
+    ```bash
+    sudo dphys-swapfile swapon
+    sudo systemctl enable dphys-swapfile
+    swapon -a
+    free -m
+    cat /proc/swaps
+    swapon -s
+    ```
 - Problems with reattaching USB solved by:
   ```bash
+  lpstat -p   # list available printers
   lpadmin -p PRINTERNAME -o usb-no-reattach-default=true
   ```
 - TODO:
