@@ -20,7 +20,7 @@ git clone https://github.com/CastraRegina/Raspinstall.git
 ## Download image(s)
 Download [Raspberry Pi OS](https://www.raspberrypi.com/software/operating-systems/):   
 [Raspberry Pi OS with desktop and recommended software](https://downloads.raspberrypi.com/raspios_full_armhf/images/).  
-For example `2023-12-05-raspios-bookworm-armhf-full.img.xz`.  
+For example `2024-11-19-raspios-bookworm-armhf-full.img.xz`.  
 **Check the `SHA256` checksum after complete download!!!**
 ```bash
 sha256sum -c *.sha256
@@ -29,7 +29,7 @@ sha256sum -c *.sha256
 ## Extract image
 Extract the image file at its place:
 ```bash
-xz -v -d 2023-12-05-raspios-bookworm-armhf-full.img.xz
+xz -v -d 2024-11-19-raspios-bookworm-armhf-full.img.xz
 ```  
 This will extract the 12GB image file.
 

@@ -24,7 +24,8 @@ CONFIGTXT=${BOOTFSDIR}config.txt
 USERCONFTXT=${BOOTFSDIR}userconf.txt
 USERNAME=fk
 RASPIIMAGE=/mnt/lanas01_test/iso_images/raspios/2023-05-03-raspios-bullseye-armhf-full.img
-RASPIIMAGE=/data/nobackup/fk/isos/2023-12-05-raspios-bookworm-armhf-full.img
+RASPIIMAGE=/data/nobackup/fk/isos/2024-11-19-raspios-bookworm-armhf-full.img
+# RASPIIMAGE=/data/nobackup/fk/isos/2023-12-05-raspios-bookworm-armhf-full.img
 # RASPIIMAGE=/data/nobackup/fk/isos/2023-05-03-raspios-bullseye-armhf-full.img
 SDCARDDEST=/dev/sda    # check carefully !!!
 
