@@ -608,7 +608,7 @@ or [https://opensource.com/article/18/3/print-server-raspberry-pi](https://opens
 or [https://ubuntu.com/server/docs/service-cups](https://ubuntu.com/server/docs/service-cups)
 - Make sure cups (and friends) is installed
   ```
-  sudo apt -y install cups hplip hplip-gui printer-driver-hpcups printer-driver-cups-pdf hp-ppd hplip-doc hpijs-ppds openprinting-ppds foomatic-db gutenprint-locales gutenprint-doc system-config-printer
+  sudo apt -y install cups hplip hplip-gui printer-driver-hpcups printer-driver-cups-pdf hp-ppd hplip-doc hpijs-ppds openprinting-ppds foomatic-db gutenprint-locales gutenprint-doc system-config-printer lpr magicfilter
   ```
 - Check if the standard user is already member of group `lpadmin` by: `id $USER`.  
   If not, do a
@@ -623,7 +623,7 @@ or [https://ubuntu.com/server/docs/service-cups](https://ubuntu.com/server/docs/
   ```
 - Make CUPS accessible across the network
   ```
-  sudo cupsctl --remote-any
+  sudo cupsctl --remote-any --share-printers --remote-admin --user-cancel-any
   ```
 - Connect with port `631` of the Raspi using a webbrowser.  
   Configure the printer:
@@ -669,6 +669,40 @@ or [https://ubuntu.com/server/docs/service-cups](https://ubuntu.com/server/docs/
   lpstat -p   # list available printers
   lpadmin -p PRINTERNAME -o usb-no-reattach-default=true
   ```
+- Troubleshooting
+  - List usb devices
+    ```
+    lsusb
+    ```
+  - List of printers
+    ```
+    lpstat -a
+    ```
+  - Printer status
+    ```
+    lpstat -p -d
+    ```
+  - Status of print job
+    ```
+    lpstat -o
+    ```
+  - Print text file
+    ```
+    lp –d PRINTERNAME /path/to/textfile
+    ```
+  - Check *cups* status
+    ```
+    systemctl status cups
+    ```
+  - Restart *cups*
+    ```
+    sudo systemctl restart cups
+    ```
+  - TODO: check: Edit file `sudo vi /etc/cups/cupsd.conf`
+    ```
+    DefaultEncryption Never
+    Encryption Never
+    ```
 - TODO:
   - Check if SAMBA settings are needed to access the printer from Windows
   - Check if these settings are persistent
