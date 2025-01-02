@@ -334,10 +334,11 @@ Runs for approximately 7 minutes.
 
 ## Run 050R_switch_to_network_manager.sh
 [`050R_switch_to_network_manager.sh`](02_install_Raspi/050R_switch_to_network_manager.sh)  
+If an error shows up then the NetworkManager is probably already used.  
 Check after execution:
 ```
 ifconfig -a
-sudo systemctl status networking
+sudo systemctl status NetworkManager
 nmcli connection 
 ```
 
