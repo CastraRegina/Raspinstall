@@ -627,7 +627,7 @@ or [https://ubuntu.com/server/docs/service-cups](https://ubuntu.com/server/docs/
   sudo cupsctl --remote-any --share-printers --remote-admin --user-cancel-any
   ```
 - Connect with port `631` of the Raspi using a webbrowser.  
-  Configure the printer:
+  Configure the printer (remark: nowadays the printer is already automatically recognized and configured):
   - `Administration` -> `Add Printer`
   - Select local printer (HP LaserJet 1100)
   - Share this printer (checkbox)
@@ -707,6 +707,32 @@ or [https://ubuntu.com/server/docs/service-cups](https://ubuntu.com/server/docs/
 - TODO:
   - Check if SAMBA settings are needed to access the printer from Windows
   - Check if these settings are persistent
+
+- Check on client side, if apparmor interferes ("enforce" section):  
+    ```
+  sudo aa-status
+  ```
+  See also
+  ```
+  sudo journalctl | grep DENIED
+  ```
+  To switch off:
+  ```
+  sudo ln -s /etc/apparmor.d/usr.sbin.cupsd /etc/apparmor.d/disable/
+  sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.cupsd
+  ```
+  ```
+  sudo ln -s /etc/apparmor.d/usr.sbin.cups-browsed /etc/apparmor.d/disable/
+  sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.cups-browsed
+  ```
+  Or just move it to "complain" section (highly recommended procedure):
+  ```
+  sudo apt-get install apparmor-utils
+  sudo aa-complain cupsd
+  sudo aa-complain cups-browsed
+  ```
+
+
 
 
 
