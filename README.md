@@ -1005,6 +1005,45 @@ echo '1-1' | sudo tee /sys/bus/usb/drivers/usb/bind      # turn on power
   - `Crtl+x`       Remove whole line (if nothing is selected)
   - `Crtl+RETURN`  Python: Run Python File in Terminal (assigned by using `Ctrl+Shift+P`)
 
+## Mount and share encrypted USB-HDD
+
+### Install / config on Raspi
+
+- Check mountpoint `lsblk`
+- Edit `/etc/nbd-server/config`
+
+  ```bash
+  [generic]
+    allowlist = true
+
+  [usbdrive]
+    exportname = /dev/sda1
+    readonly = false
+    copyonwrite = false
+  ```
+
+- Restart nbd-server: `sudo systemctl restart nbd-server`
+- Check status: `ss -tulpen | grep 10809`
+
+### Install / config on Client
+
+- Install
+  
+  ```bash
+  sudo apt install nbd-client cryptsetup
+  ```
+
+- Setup
+
+  ```bash
+  sudo modprobe nbd
+  sudo nbd-client <IP_DES_RPI>  -name usbdrive /dev/nbd0
+  sudo nbd-client 192.168.2.123 -name usbdrive /dev/nbd0
+  ```
+  
+
+
+
 
 ---
 ---
